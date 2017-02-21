@@ -1,2 +1,2 @@
 # stock-market-simulator
-Stock Market Simulator for SWE
+Stock Market Simulator for SWE Group Project
