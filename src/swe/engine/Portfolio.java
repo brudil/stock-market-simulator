@@ -9,4 +9,8 @@ public class Portfolio {
         this.trader =  trader;
     }
 
+    public void onNewDay() {
+        this.trader.onNewDay();
+    }
+
 }
