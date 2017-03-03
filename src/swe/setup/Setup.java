@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package swe.Setup;
+package swe.setup;
 
-import static java.lang.Boolean.FALSE;
 import java.util.ArrayList;
 import java.util.Scanner;
+import swe.engine.Company;
+import swe.engine.Portfolio;
+import swe.engine.StockType;
+import swe.engine.traders.RandomTrader;
 
-/**
- *
- * @author Fin
- */
 class Setup {
     ArrayList<Company> Companies = new ArrayList<>();
     ArrayList<Portfolio> Clients = new ArrayList<>();
@@ -76,7 +70,7 @@ class Setup {
         
         // enter company type
         int done = 0;
-        String c_type = "";
+        StockType selectedStockType = null;
         while (done == 0) {
             System.out.println("\nChoose Company Type: ");
             System.out.println("1. Hi-Tech");
@@ -89,22 +83,22 @@ class Setup {
                 switch (choice) {
                 case 1:
                     System.out.println("\nHi-Tech Selected\n");
-                    c_type = "HI-TECH";
+                    selectedStockType = StockType.HITECH;
                     done = 1;
                     break;
                 case 2:
                     System.out.println("\nProperty Selected\n");
-                    c_type = "PROPERTY";
+                    selectedStockType = StockType.PROPERTY;
                     done = 1;
                     break;
                 case 3:
                     System.out.println("\nHard Selected\n");
-                    c_type = "HARD";
+                    selectedStockType = StockType.HARD;
                     done = 1;
                     break;
                 case 4:
                     System.out.println("\nFood Selected\n");
-                    c_type = "FOOD";
+                    selectedStockType = StockType.FOOD;
                     done = 1;
                     break;
                 default:
@@ -118,7 +112,7 @@ class Setup {
         int c_price = s.nextInt();
         
         // create the new company and add it to the global companies array list.
-        Companies.add(new Company(c_name, c_type, c_price));
+        Companies.add(new Company(c_name, selectedStockType, c_price));
         System.out.println("\nCompany '"+c_name+"' has been added!\n");
     }
 
@@ -182,7 +176,7 @@ class Setup {
         double cash = s.nextDouble();
         
         // create the new client and add it to the global clients array list.
-        Portfolio new_client = new Portfolio(name, cash, trader);
+        Portfolio new_client = new Portfolio(name, cash, new RandomTrader());
         Clients.add(new_client);
         System.out.println("\nClient '"+name+"' has been added!\n");
         

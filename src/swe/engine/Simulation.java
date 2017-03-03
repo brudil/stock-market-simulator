@@ -8,9 +8,8 @@ import java.util.GregorianCalendar;
  * Houses everything needed to run an independent market simulation.
  */
 public class Simulation {
-
-    Calendar calendar = new GregorianCalendar(2017, 0, 1, 9, 0);
-    ArrayList<Portfolio> portfolios = new ArrayList<>();
+    private Calendar calendar = new GregorianCalendar(2017, 0, 1, 9, 0);
+    private ArrayList<Portfolio> portfolios = new ArrayList<>();
 
 
     /**
@@ -44,6 +43,10 @@ public class Simulation {
         // 6) done
     }
 
+
+    /**
+     * Move time forward for next tick
+     */
     private void updateDateForNextTick() {
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         if (currentHour >= 9 && currentHour < 16) {
