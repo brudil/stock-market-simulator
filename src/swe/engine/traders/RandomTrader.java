@@ -52,6 +52,11 @@ public class RandomTrader extends Trader {
         }
     }
 
+    @Override
+    public void getTradesForTick() {
+        this.getCurrentTrader().getTradesForTick();
+    }
+
     private Trader getCurrentTrader() {
         switch (this.currentInnerTrader) {
             case BALANCED:
