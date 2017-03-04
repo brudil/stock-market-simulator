@@ -1,5 +1,8 @@
 package swe.engine;
 
+import swe.engine.traders.RandomInnerTraders;
+import swe.engine.traders.RandomTrader;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -9,8 +12,12 @@ import java.util.GregorianCalendar;
  */
 public class Simulation {
     private Calendar calendar = new GregorianCalendar(2017, 0, 1, 9, 0);
-    private ArrayList<Portfolio> portfolios = new ArrayList<>();
+    private Market market;
 
+
+    public Simulation(ArrayList<Company> companies, ArrayList<Portfolio> portfolios) {
+        this.market = new Market(companies, portfolios);
+    }
 
     /**
      * Performs a 15min trading period
@@ -65,7 +72,7 @@ public class Simulation {
 
 
             // trigger onNewDay for portfolios
-            for (Portfolio portfolio : this.portfolios) {
+            for (Portfolio portfolio : this.market.getPortfolios()) {
                 portfolio.onNewDay();
             }
 
@@ -120,7 +127,13 @@ public class Simulation {
 
 
     public static void main(String args[]) {
-        Simulation sim = new Simulation();
+        ArrayList<Company> companies = new ArrayList<>();
+        companies.add(new Company("Monsters Inc.", StockType.HITECH, 300));
+
+        ArrayList<Portfolio> portfolios = new ArrayList<>();
+        portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
+
+        Simulation sim = new Simulation(companies, portfolios);
         for(int t = 0; t < 28 * 365; t++) {
             sim.performTick();
         }
