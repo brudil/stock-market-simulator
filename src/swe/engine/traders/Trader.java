@@ -1,10 +1,8 @@
 package swe.engine.traders;
 
-import swe.engine.Company;
 import swe.engine.Market;
 import swe.engine.Portfolio;
-
-import java.util.HashMap;
+import swe.engine.TradeSlip;
 
 public abstract class Trader {
 
@@ -13,5 +11,5 @@ public abstract class Trader {
      */
     public void onNewDay() {}
 
-    abstract public HashMap<Company, Integer> getRequestedTrades(Portfolio portfolio, Market market);
+    abstract public TradeSlip getRequestedTrades(Portfolio portfolio, Market market);
 }

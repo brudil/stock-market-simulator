@@ -32,8 +32,8 @@ public class Market {
         return MarketStatus.BEAR;
     }
 
-    public HashMap<Portfolio, HashMap<Company, Integer>> getRequestedPortfolioTrades() {
-        HashMap<Portfolio, HashMap<Company, Integer>> trades = new HashMap<>();
+    public HashMap<Portfolio, TradeSlip> getRequestedPortfolioTrades() {
+        HashMap<Portfolio, TradeSlip> trades = new HashMap<>();
         for (Portfolio portfolio : this.portfolios) {
             trades.put(portfolio, portfolio.getRequestedTrades());
         }
@@ -41,7 +41,7 @@ public class Market {
         return trades;
     }
 
-    public void commitBestCaseTrades(HashMap<Portfolio, HashMap<Company, Integer>> trades) {
+    public void commitBestCaseTrades(HashMap<Portfolio, TradeSlip> trades) {
 
     }
 }

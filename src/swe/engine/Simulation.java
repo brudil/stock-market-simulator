@@ -35,7 +35,7 @@ public class Simulation {
         // essentially, on open days 28 ticks. 9am to 4pm
         // if new date, call onNewDay for all portfolios.
 
-        HashMap<Portfolio, HashMap<Company, Integer>> trades = this.market.getRequestedPortfolioTrades();
+        HashMap<Portfolio, TradeSlip> trades = this.market.getRequestedPortfolioTrades();
 
         this.market.commitBestCaseTrades(trades);
 

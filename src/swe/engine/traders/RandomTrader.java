@@ -3,6 +3,7 @@ package swe.engine.traders;
 import swe.engine.Company;
 import swe.engine.Market;
 import swe.engine.Portfolio;
+import swe.engine.TradeSlip;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -65,7 +66,7 @@ public class RandomTrader extends Trader {
     }
 
     @Override
-    public HashMap<Company, Integer> getRequestedTrades(Portfolio portfolio, Market market) {
+    public TradeSlip getRequestedTrades(Portfolio portfolio, Market market) {
         return this.getCurrentTrader().getRequestedTrades(portfolio, market);
     }
 
