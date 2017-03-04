@@ -6,6 +6,7 @@ import swe.engine.traders.RandomTrader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 /**
  * Houses everything needed to run an independent market simulation.
@@ -34,13 +35,9 @@ public class Simulation {
         // essentially, on open days 28 ticks. 9am to 4pm
         // if new date, call onNewDay for all portfolios.
 
-        /*
-        ArrayList<TradeSlip> trades = new ArrayList<TradeSlip>();
+        HashMap<Portfolio, HashMap<Company, Integer>> trades = this.market.getRequestedPortfolioTrades();
 
-        for (Portfolio portfolio : this.portfolios) {
-            trades.addAll(portfolio.getTrades)
-        }
-        */
+        this.market.commitBestCaseTrades(trades);
 
         // 1) get sale offers and sought purchases
         // 2) determine what will be brought and sold

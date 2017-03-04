@@ -51,4 +51,8 @@ public class Portfolio {
 
         return s+s2;
     }
+
+    public HashMap<Company, Integer> getRequestedTrades() {
+        return this.trader.getRequestedTrades(this, this.market);
+    }
 }

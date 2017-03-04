@@ -1,5 +1,10 @@
 package swe.engine.traders;
 
+import swe.engine.Company;
+import swe.engine.Market;
+import swe.engine.Portfolio;
+
+import java.util.HashMap;
 import java.util.Random;
 
 // using composition this directs out our calls to the trader of the day (being either balanced, aggressive purchaser and aggressive seller)
@@ -60,8 +65,8 @@ public class RandomTrader extends Trader {
     }
 
     @Override
-    public void getTradesForTick() {
-        this.getCurrentTrader().getTradesForTick();
+    public HashMap<Company, Integer> getRequestedTrades(Portfolio portfolio, Market market) {
+        return this.getCurrentTrader().getRequestedTrades(portfolio, market);
     }
 
     private Trader getCurrentTrader() {

@@ -1,5 +1,11 @@
 package swe.engine.traders;
 
+import swe.engine.Company;
+import swe.engine.Market;
+import swe.engine.Portfolio;
+
+import java.util.HashMap;
+
 public abstract class Trader {
 
     /**
@@ -7,6 +13,5 @@ public abstract class Trader {
      */
     public void onNewDay() {}
 
-    public void getTradesForTick() {}
-
+    abstract public HashMap<Company, Integer> getRequestedTrades(Portfolio portfolio, Market market);
 }

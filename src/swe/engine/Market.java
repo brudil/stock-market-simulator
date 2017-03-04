@@ -1,6 +1,5 @@
 package swe.engine;
 
-import javax.sound.sampled.Port;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -31,5 +30,18 @@ public class Market {
 
     public MarketStatus getMarketStatus() {
         return MarketStatus.BEAR;
+    }
+
+    public HashMap<Portfolio, HashMap<Company, Integer>> getRequestedPortfolioTrades() {
+        HashMap<Portfolio, HashMap<Company, Integer>> trades = new HashMap<>();
+        for (Portfolio portfolio : this.portfolios) {
+            trades.put(portfolio, portfolio.getRequestedTrades());
+        }
+
+        return trades;
+    }
+
+    public void commitBestCaseTrades(HashMap<Portfolio, HashMap<Company, Integer>> trades) {
+
     }
 }
