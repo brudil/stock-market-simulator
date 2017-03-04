@@ -16,11 +16,17 @@ public class Portfolio {
         this.trader = trader;
     }
 
-    public void setMarket(Market market) {
+    /**
+     * Assigns the portfolio to a market.
+     * Called automatically by Market when instantiated
+     * Required for many market based methods
+     * @param market the market the portfolio is within
+     */
+    protected void setMarket(Market market) {
         this.market = market;
     }
 
-    public void onNewDay() {
+    protected void onNewDay() {
         this.trader.onNewDay();
     }
 
@@ -52,7 +58,12 @@ public class Portfolio {
         return s+s2;
     }
 
-    public HashMap<Company, Integer> getRequestedTrades() {
+
+    /**
+     * Gets requested changes from the portfolios trader
+     * @return a map of trades company:shares change
+     */
+    public TradeSlip getRequestedTrades() {
         return this.trader.getRequestedTrades(this, this.market);
     }
 }
