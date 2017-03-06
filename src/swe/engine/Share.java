@@ -15,6 +15,9 @@ public class Share {
     public String toString() {
         return "Share{" + "Company=" + "tbi" + ", no_of_shares=" + this.numberOfShares + '}';
     }
-    
-    
+
+
+    public void deltaSharesBy(int amount) {
+        this.numberOfShares = this.numberOfShares + amount;
+    }
 }
