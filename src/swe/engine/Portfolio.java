@@ -2,9 +2,10 @@ package swe.engine;
 
 import swe.engine.traders.Trader;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Portfolio {
+public class Portfolio implements Serializable {
     private String name;
     private Trader trader;
     private double cash;

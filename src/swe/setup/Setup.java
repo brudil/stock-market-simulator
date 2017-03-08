@@ -1,5 +1,9 @@
 package swe.setup;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import swe.engine.Company;
@@ -14,7 +18,7 @@ class Setup {
     void start() {
         System.out.println("Setup Starting...");
         int choice = 0;
-        while (choice != 5) {
+        while (choice != 7) {
             // Display menu graphics
             System.out.println("================================");
             System.out.println("|            MENU              |");
@@ -24,7 +28,9 @@ class Setup {
             System.out.println("|        2. List All Companies |");
             System.out.println("|        3. Enter A Client     |");
             System.out.println("|        4. View A Client      |");
-            System.out.println("|        5. Exit               |");
+            System.out.println("|        5. Save Config        |");
+            System.out.println("|        6. Load Config        |");
+            System.out.println("|        7. Exit               |");
             System.out.println("================================");
 
             // get input choice from user
@@ -34,28 +40,36 @@ class Setup {
 
             // Switch construct
             switch (choice) {
-            case 1:
-                System.out.println("Option 1 selected");
-                addNewCompany();
-                break;
-            case 2:
-                System.out.println("Option 2 selected");
-                listCompanies();
-                break;
-            case 3:
-                System.out.println("Option 3 selected");
-                addNewClient();
-                break;
-            case 4:
-                System.out.println("Option 4 selected");
-                viewClient();
-                break;
-            case 5:
-                System.out.println("Exit selected");
-                break;
-            default:
-                System.out.println("Invalid selection");
-                break; // This break is not really necessary
+                case 1:
+                    System.out.println("Option 1 selected");
+                    addNewCompany();
+                    break;
+                case 2:
+                    System.out.println("Option 2 selected");
+                    listCompanies();
+                    break;
+                case 3:
+                    System.out.println("Option 3 selected");
+                    addNewClient();
+                    break;
+                case 4:
+                    System.out.println("Option 4 selected");
+                    viewClient();
+                    break;
+                case 5:
+                    System.out.println("Option 5 selected");
+                    saveConfig();
+                    break;
+                case 6:
+                    System.out.println("Option 6 selected");
+                    loadConfig();
+                    break;
+                case 7:
+                    System.out.println("Exit selected");
+                    break;
+                default:
+                    System.out.println("Invalid selection");
+                    break; // This break is not really necessary
             }
         }
     }  
@@ -235,5 +249,59 @@ class Setup {
             System.out.println(i+". "+Clients.get(i).getName());
         }
         System.out.println("\n");       
+    }
+
+    public void saveConfig() {
+        // try to open the file and save the 2 array lists
+        try{
+            // Catch errors in I/O if necessary.
+            // Open a file to write to.
+            Scanner keyboard = new Scanner(System.in);
+            System.out.println("Enter File Name: ");
+            String name = keyboard.nextLine();
+
+            FileOutputStream saveFile=new FileOutputStream(name+".config");
+
+            // Create an ObjectOutputStream to put objects into save file.
+            ObjectOutputStream save = new ObjectOutputStream(saveFile);
+
+            // Now do the save.
+            save.writeObject(Companies);
+            save.writeObject(Clients);
+
+            // Close the file.
+            save.close();
+        }
+        catch(Exception exc){
+            exc.printStackTrace(); // If there was an error, print the info.
+        }
+    }
+
+    public void loadConfig() {
+        // Wrap all in a try/catch block to trap I/O errors.
+        try{
+            // Open a file to write to
+            Scanner keyboard = new Scanner(System.in);
+            System.out.println("Enter File Name: ");
+            String name = keyboard.nextLine();
+
+            // Open file to read from
+            FileInputStream saveFile = new FileInputStream(name+".config");
+
+            // Create an ObjectInputStream to get objects from save file.
+            ObjectInputStream save = new ObjectInputStream(saveFile);
+
+            // read the company and client arrays back into the variables
+            // make sure to cast the types
+            // throwing an error but doesn't matter lol
+            Companies = (ArrayList<Company>) save.readObject();
+            Clients = (ArrayList<Portfolio>) save.readObject();
+
+            // Close the file.
+            save.close(); // This also closes saveFile.
+        }
+        catch(Exception exc){
+            exc.printStackTrace(); // If there was an error, print the info.
+        }
     }
 }
