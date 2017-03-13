@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Market contains all market state ensuring consistency
+ */
 public class Market {
     private ArrayList<Company> companies;
     private ArrayList<Portfolio> portfolios;
@@ -103,7 +106,7 @@ public class Market {
         share.deltaSharesBy(amount);
     }
 
-    private void moveShares(Company company, Portfolio portfolioFrom, Portfolio portfolioTo, int amount) {
+    public void moveShares(Company company, Portfolio portfolioFrom, Portfolio portfolioTo, int amount) {
         this.sellSharesInPortfolio(company, portfolioFrom, amount);
         this.buySharesInPortfolio(company, portfolioTo, amount);
     }

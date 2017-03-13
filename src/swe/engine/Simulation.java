@@ -30,20 +30,17 @@ public class Simulation {
         this.updateDateForNextTick();
         System.out.println(calendar.get(Calendar.DAY_OF_WEEK) + " " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " @ " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
 
-        // update date
-        // logic to skip weekends, shut time, celebration days etc
-        // essentially, on open days 28 ticks. 9am to 4pm
-        // if new date, call onNewDay for all portfolios.
-
-        HashMap<Portfolio, TradeSlip> trades = this.market.getRequestedPortfolioTrades();
-
-        this.market.commitBestCaseTrades(trades);
 
         // 1) get sale offers and sought purchases
+        HashMap<Portfolio, TradeSlip> trades = this.market.getRequestedPortfolioTrades();
+
         // 2) determine what will be brought and sold
         // 3) do transactions
+        this.market.performRequestedTradesBestAttempt(trades);
+
         // 4) adjust share prices
         // 5) update share index
+        // above via 'market.finishTrading()'
         // 6) done
     }
 
