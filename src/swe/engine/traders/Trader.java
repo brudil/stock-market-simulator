@@ -1,5 +1,9 @@
 package swe.engine.traders;
 
+import swe.engine.Market;
+import swe.engine.Portfolio;
+import swe.engine.TradeSlip;
+
 public abstract class Trader {
 
     /**
@@ -7,6 +11,5 @@ public abstract class Trader {
      */
     public void onNewDay() {}
 
-    public void getTradesForTick() {}
-
+    abstract public TradeSlip getRequestedTrades(Portfolio portfolio, Market market);
 }

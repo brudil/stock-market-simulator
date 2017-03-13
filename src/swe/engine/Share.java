@@ -1,26 +1,23 @@
 package swe.engine;
 
 public class Share {
-    Company company;
-    int numberOfShares;
+    private int numberOfShares;
 
-    public Share(Company company, int numberOfShares) {
-        this.company = company;
+    public Share(int numberOfShares) {
         this.numberOfShares = numberOfShares;
     }
 
-    public Company getCompany() {
-        return this.company;
-    }
-
-    public int getNoOfShares() {
+    public int getNumberOfShares() {
         return this.numberOfShares;
     }
 
     @Override
     public String toString() {
-        return "Share{" + "Company=" + this.company + ", no_of_shares=" + this.numberOfShares + '}';
+        return "Share{" + "Company=" + "tbi" + ", no_of_shares=" + this.numberOfShares + '}';
     }
-    
-    
+
+
+    public void deltaSharesBy(int amount) {
+        this.numberOfShares = this.numberOfShares + amount;
+    }
 }

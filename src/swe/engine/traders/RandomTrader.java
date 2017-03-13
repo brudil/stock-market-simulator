@@ -1,20 +1,33 @@
 package swe.engine.traders;
 
+import swe.engine.Company;
+import swe.engine.Market;
+import swe.engine.Portfolio;
+import swe.engine.TradeSlip;
+
+import java.util.HashMap;
 import java.util.Random;
 
 // using composition this directs out our calls to the trader of the day (being either balanced, aggressive purchaser and aggressive seller)
 
 public class RandomTrader extends Trader {
 
-    RandomInnerTraders currentInnerTrader;
-    Trader balancedTrader;
-    Trader aggressivePurchaserTrader;
-    Trader aggressiveSellerTrader;
+    private RandomInnerTraders currentInnerTrader;
+    private Trader balancedTrader;
+    private Trader aggressivePurchaserTrader;
+    private Trader aggressiveSellerTrader;
 
     public RandomTrader() {
         this.balancedTrader = new BalancedTrader();
-        this.aggressivePurchaserTrader = new BalancedTrader();
-        this.aggressiveSellerTrader = new BalancedTrader();
+        this.aggressivePurchaserTrader = new AggressivePurchaserTrader();
+        this.aggressiveSellerTrader = new AggressiveSellerTrader();
+    }
+
+    public RandomTrader(RandomInnerTraders initialInnerTrader) {
+        this.currentInnerTrader = initialInnerTrader;
+        this.balancedTrader = new BalancedTrader();
+        this.aggressivePurchaserTrader = new AggressivePurchaserTrader();
+        this.aggressiveSellerTrader = new AggressiveSellerTrader();
     }
 
     public void onNewDay() {
@@ -53,8 +66,8 @@ public class RandomTrader extends Trader {
     }
 
     @Override
-    public void getTradesForTick() {
-        this.getCurrentTrader().getTradesForTick();
+    public TradeSlip getRequestedTrades(Portfolio portfolio, Market market) {
+        return this.getCurrentTrader().getRequestedTrades(portfolio, market);
     }
 
     private Trader getCurrentTrader() {

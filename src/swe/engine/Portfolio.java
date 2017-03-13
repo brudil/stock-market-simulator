@@ -1,15 +1,15 @@
 package swe.engine;
 
-import swe.engine.traders.Trader;
-
+import java.util.HashMap;
 import java.io.Serializable;
 import java.util.ArrayList;
+import swe.engine.traders.Trader;
 
 public class Portfolio implements Serializable {
     private String name;
     private Trader trader;
     private double cash;
-    private ArrayList<Share> shares = new ArrayList<>();
+    private Market market;
 
     public Portfolio(String name, double cash, Trader trader) {
         this.name = name;
@@ -17,7 +17,17 @@ public class Portfolio implements Serializable {
         this.trader = trader;
     }
 
-    public void onNewDay() {
+    /**
+     * Assigns the portfolio to a market.
+     * Called automatically by Market when instantiated
+     * Required for many market based methods
+     * @param market the market the portfolio is within
+     */
+    protected void setMarket(Market market) {
+        this.market = market;
+    }
+
+    protected void onNewDay() {
         this.trader.onNewDay();
     }
 
@@ -29,17 +39,12 @@ public class Portfolio implements Serializable {
         return this.cash;
     }
 
-    // TODO: probs not needed.
-    public Trader getTrader() {
-        return this.trader;
-    }
-
-    public ArrayList<Share> getShares() {
-        return this.shares;
+    public HashMap<Company, Share> getShares() {
+        return this.market.getSharesForPortfolio(this);
     }
 
     public void addNewShare(Company c, int NoOfShares) {
-        this.shares.add(new Share(c, NoOfShares));
+        // this.market.deltaSharesForPortfolio(new Share(c, NoOfShares));
     }
 
     @Override
@@ -47,10 +52,19 @@ public class Portfolio implements Serializable {
         String s = "Client{" + "Name=" + this.name + ", Cash=" + this.cash + ", Trader_Type=" + "tbi";
         String s2 = "\nShares:\n";
 
-        for (int i = 0; i < this.shares.size(); i++) {
-            s2 = s2.concat("Company: "+this.shares.get(i).getCompany().getName()+"\tNo Of Shares: "+this.shares.get(i).getNoOfShares()+"\n");
-        }
+        //for (int i = 0; i < this.shares.size(); i++) {
+        //    s2 = s2.concat("Company: "+this.shares.get(i).getCompany().getName()+"\tNo Of Shares: "+this.shares.get(i).getNoOfShares()+"\n");
+        //}
 
         return s+s2;
+    }
+
+
+    /**
+     * Gets requested changes from the portfolios trader
+     * @return a map of trades company:shares change
+     */
+    public TradeSlip getRequestedTrades() {
+        return this.trader.getRequestedTrades(this, this.market);
     }
 }
