@@ -1,10 +1,11 @@
 package swe.engine;
 
+import java.util.HashMap;
+import java.io.Serializable;
+import java.util.ArrayList;
 import swe.engine.traders.Trader;
 
-import java.util.HashMap;
-
-public class Portfolio {
+public class Portfolio implements Serializable {
     private String name;
     private Trader trader;
     private double cash;

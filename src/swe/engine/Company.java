@@ -1,6 +1,8 @@
 package swe.engine;
 
-public class Company {
+import java.io.Serializable;
+
+public class Company implements Serializable {
     String name;
     StockType stockType;
     int price;
