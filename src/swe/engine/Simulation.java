@@ -30,6 +30,8 @@ public class Simulation {
         for(TickIdentifier tick : this.simulationCalendar.getAllTickIdentifiers()) {
             this.performTick(tick);
         }
+
+        System.out.println(this.history.getStateForEndOfEachDay().length);
     }
 
     public History getHistory() {
