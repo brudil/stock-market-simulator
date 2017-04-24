@@ -14,14 +14,16 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import swe.engine.History;
-import swe.engine.HistoryState;
+import swe.engine.*;
+import swe.engine.traders.RandomInnerTraders;
+import swe.engine.traders.RandomTrader;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -32,9 +34,10 @@ public class SweUserInterface extends JFrame {
     private JButton buttonStart;
     private int currentDay = 1;
     private int[] data = new int[364];
+    private Simulation simulation;
+    private History history;
 
-    public SweUserInterface(History h) {
-        data = initialiseIndexDataset(h);
+    public SweUserInterface() {
         // create the GUI
         createGUI();
 
@@ -92,10 +95,30 @@ public class SweUserInterface extends JFrame {
         // start button
         JButton buttonStart = new JButton("Start Simulation");
         toolbar.add(buttonStart);
+        buttonStart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                simulation.runSimulation();
+                history = simulation.getHistory();
+                data = initialiseIndexDataset(history);
+            }
+        });
 
         // setup button
         JButton buttonSetup = new JButton("Setup");
         toolbar.add(buttonSetup);
+        buttonSetup.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // create test arrays
+                ArrayList<Company> companies = new ArrayList<>();
+                companies.add(new Company("Monsters Inc.", StockType.HITECH, 300));
+                ArrayList<Portfolio> portfolios = new ArrayList<>();
+                portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
+
+                simulation = new Simulation(companies, portfolios);
+            }
+        });
 
         // day back button
         JButton buttonBack = new JButton("<<");
