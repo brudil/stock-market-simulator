@@ -1,14 +1,26 @@
 package swe.gui;
 
+import javafx.beans.value.ChangeListener;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
 
 /**
  * Created by Fin on 23/04/2017.
@@ -16,8 +28,11 @@ import java.awt.*;
 public class SweUserInterface extends JFrame {
 
     private JButton buttonStart;
+    private int currentDay = 1;
+    private int[] data = new int[364];
 
     public SweUserInterface() {
+        data = initialiseIndexDataset();
         // create the GUI
         createGUI();
 
@@ -32,6 +47,15 @@ public class SweUserInterface extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    private int[] initialiseIndexDataset() {
+        Random rand = new Random();
+        int[] d = new int[364];
+        for(int i = 0; i < 364; i++) {
+            d[i] = rand.nextInt(100) + 1;
+        }
+        return d;
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -42,56 +66,93 @@ public class SweUserInterface extends JFrame {
     }
 
     private void createGUI() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-
-        // add the index chart to the panel
-        c.fill = GridBagConstraints.BOTH;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.ipadx = 10;
-        c.ipady = 10;
-        ChartPanel panelIndexChart = createIndexChart();
-        panel.add(panelIndexChart, c);
-
-        // add the client chart to the panel
-        c.fill = GridBagConstraints.BOTH;
-        c.gridx = 1;
-        c.gridy = 0;
-        c.ipadx = 10;
-        c.ipady = 10;
-        ChartPanel panelClientChart = createClientChart();
-        panel.add(panelClientChart, c);
-
-        // start button
-        c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 1;
-        c.ipadx = 10;
-        c.ipady = 10;
-        JButton buttonStart = new JButton("Start Simulation");
-        panel.add(buttonStart, c);
-
-        // setup button
-        c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 1;
-        c.ipadx = 10;
-        c.ipady = 10;
-        JButton buttonSetup = new JButton("Setup");
-        panel.add(buttonSetup, c);
-
-        //panel.setBackground(Color.BLACK);
+        // get the main panel
+        JPanel panel = getMainPanel();
+        // add it to the content pane
         getContentPane().add(panel);
     }
 
+    private JPanel getMainPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        // add the index chart to the panel
+        ChartPanel panelIndexChart = createIndexChart();
+        panel.add(panelIndexChart, BorderLayout.LINE_START);
+
+        // add the client chart to the panel
+        ChartPanel panelClientChart = createClientChart();
+        panel.add(panelClientChart, BorderLayout.LINE_END);
+
+        // create toolbar at bottom of GUI
+        JPanel toolbar = new JPanel();
+
+        // start button
+        JButton buttonStart = new JButton("Start Simulation");
+        toolbar.add(buttonStart);
+
+        // setup button
+        JButton buttonSetup = new JButton("Setup");
+        toolbar.add(buttonSetup);
+
+        // day back button
+        JButton buttonBack = new JButton("<<");
+        toolbar.add(buttonBack);
+        // add action listener to button
+        buttonBack.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentDay--;
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
+            }
+        });
+
+        // day label
+        JLabel labelDay = new JLabel("Day: "+currentDay);
+        toolbar.add(labelDay, BorderLayout.LINE_END);
+
+        // day advance button
+        JButton buttonAdvance = new JButton(">>");
+        toolbar.add(buttonAdvance);
+        // add action listener to button
+        buttonAdvance.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentDay++;
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
+            }
+        });
+
+        panel.add(toolbar, BorderLayout.PAGE_END);
+        return panel;
+    }
+
     private ChartPanel createIndexChart() {
-        JFreeChart lineChart = ChartFactory.createLineChart(
+        JFreeChart lineChart = ChartFactory.createXYLineChart(
                 "Stock Market Index",
                 "Time","Index",
                 createIndexDataset(),
                 PlotOrientation.VERTICAL,
                 true,true,false);
+
+        // get the xyplot
+        XYPlot xyPlot = lineChart.getXYPlot();
+        ValueAxis xAxis = xyPlot.getDomainAxis();
+        ValueAxis yAxis = xyPlot.getRangeAxis();
+
+        // set the range of the axis
+        xAxis.setRange(0.0, 365);
+        yAxis.setRange(0.0, 100);
+
+        // set the tick amount (units)
+        XYPlot plot = (XYPlot) lineChart.getPlot();
+        final NumberAxis numAxis = (NumberAxis) plot.getDomainAxis();
+        numAxis.setTickUnit(new NumberTickUnit(20));
 
         ChartPanel chartPanel = new ChartPanel( lineChart );
         return chartPanel;
@@ -113,42 +174,26 @@ public class SweUserInterface extends JFrame {
     }
 
     private CategoryDataset createClientDataset() {
-        final String fiat = "FIAT";
-        final String audi = "AUDI";
-        final String ford = "FORD";
-        final String speed = "Speed";
-        final String millage = "Millage";
-        final String userrating = "User Rating";
-        final String safety = "safety";
+        final String client = "CLIENT WORTH";
         final DefaultCategoryDataset dataset =
-                new DefaultCategoryDataset( );
+                new DefaultCategoryDataset();
 
-        dataset.addValue( 1.0 , fiat , speed );
-        dataset.addValue( 3.0 , fiat , userrating );
-        dataset.addValue( 5.0 , fiat , millage );
-        dataset.addValue( 5.0 , fiat , safety );
-
-        dataset.addValue( 5.0 , audi , speed );
-        dataset.addValue( 6.0 , audi , userrating );
-        dataset.addValue( 10.0 , audi , millage );
-        dataset.addValue( 4.0 , audi , safety );
-
-        dataset.addValue( 4.0 , ford , speed );
-        dataset.addValue( 2.0 , ford , userrating );
-        dataset.addValue( 3.0 , ford , millage );
-        dataset.addValue( 6.0 , ford , safety );
+        dataset.addValue( 1.0 , client,"Bob" );
+        dataset.addValue( 3.0 , client,"Joe" );
+        dataset.addValue( 5.0 , client,"Fred" );
+        dataset.addValue( 5.0 , client,"Greg" );
 
         return dataset;
     }
 
-    private DefaultCategoryDataset createIndexDataset( ) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
-        dataset.addValue( 15 , "index" , "1970" );
-        dataset.addValue( 30 , "index" , "1980" );
-        dataset.addValue( 60 , "index" ,  "1990" );
-        dataset.addValue( 120 , "index" , "2000" );
-        dataset.addValue( 240 , "index" , "2010" );
-        dataset.addValue( 300 , "index" , "2014" );
-        return dataset;
+    private XYDataset createIndexDataset() {
+        XYSeries dataset = new XYSeries("Stock Index Chart");
+        for (int i = 0; i < currentDay-1; i++) {
+            //add to dataset
+            dataset.add(i + 1, data[i]);
+        }
+
+        XYDataset data = new XYSeriesCollection(dataset);
+        return data;
     }
 }
