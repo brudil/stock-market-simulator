@@ -14,6 +14,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import swe.engine.History;
+import swe.engine.HistoryState;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -31,8 +33,8 @@ public class SweUserInterface extends JFrame {
     private int currentDay = 1;
     private int[] data = new int[364];
 
-    public SweUserInterface() {
-        data = initialiseIndexDataset();
+    public SweUserInterface(History h) {
+        data = initialiseIndexDataset(h);
         // create the GUI
         createGUI();
 
@@ -47,23 +49,24 @@ public class SweUserInterface extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private int[] initialiseIndexDataset() {
+    private int[] initialiseIndexDataset(History h) {
         Random rand = new Random();
         int[] d = new int[364];
         for(int i = 0; i < 364; i++) {
-            d[i] = rand.nextInt(100) + 1;
+            d[i] = h.getStateForTick(i*28).shareIndex;
+            //d[i] = rand.nextInt(100) + 1;
         }
         return d;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new SweUserInterface().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                new SweUserInterface().setVisible(true);
+//            }
+//        });
+//    }
 
     private void createGUI() {
         // get the main panel
