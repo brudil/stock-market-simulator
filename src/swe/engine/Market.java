@@ -3,6 +3,7 @@ package swe.engine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,6 +15,7 @@ public class Market {
     private ArrayList<Portfolio> portfolios;
     private HashMap<Company, HashMap<Portfolio, Share>> companyShares;
     private HashMap<Portfolio, HashMap<Company, Share>> portfolioShares;
+    private int shareIndex = 20;
 
     public Market(ArrayList<Company> companies, ArrayList<Portfolio> portfolios) {
         this.companies = companies;
@@ -27,8 +29,6 @@ public class Market {
     public HashMap<Company, Share> getSharesForPortfolio(Portfolio portfolio) {
         return this.portfolioShares.getOrDefault(portfolio, null);
     }
-
-    public void serializeState() {}
 
     public ArrayList<Portfolio> getPortfolios() {
         return this.portfolios;
@@ -170,5 +170,10 @@ public class Market {
         }
         // TODO: ensure what we have sold equals what was brought
 
+    }
+
+    public int getShareIndex() {
+        Random r = new Random();
+        return r.nextInt(100) + 1;
     }
 }
