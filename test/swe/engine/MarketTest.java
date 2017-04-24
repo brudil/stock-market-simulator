@@ -36,14 +36,9 @@ public class MarketTest {
         market = new Market(companies, portfolios);
     }
 
-    @Test
-    public void getSharesForCompany() throws Exception {
-        market.getSharesForCompany();
-    }
 
     @Test
     public void getSharesForPortfolio() throws Exception {
 
     }
-
 }
