@@ -11,18 +11,11 @@ import java.util.ArrayList;
 class Main {
 
     public static void main(String[] args) {
-        ArrayList<Company> companies = new ArrayList<>();
-        companies.add(new Company("Monsters Inc.", StockType.HITECH, 300));
-
-        ArrayList<Portfolio> portfolios = new ArrayList<>();
-        portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
-        Simulation s = new Simulation(companies, portfolios);
-        s.runSimulation();
-        History h = s.getHistory();
+        //create simulation
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new SweUserInterface(h).setVisible(true);
+                new SweUserInterface().setVisible(true);
             }
         });
 
