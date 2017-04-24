@@ -34,7 +34,7 @@ public class SweUserInterface extends JFrame {
 
     private JButton buttonStart;
     private int currentDay = 1;
-    private Float[] data = new Float[365];
+    private Float[] data = new Float[300];
     private Simulation simulation;
     private History history;
 
@@ -109,11 +109,18 @@ public class SweUserInterface extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // create test arrays
                 ArrayList<Company> companies = new ArrayList<>();
-                companies.add(new Company("Monsters Inc.", StockType.HITECH, 300));
+                companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
                 ArrayList<Portfolio> portfolios = new ArrayList<>();
                 portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
 
                 simulation = new Simulation(companies, portfolios);
+
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new SetupUserInterface().setVisible(true);
+                    }
+                });
             }
         });
 

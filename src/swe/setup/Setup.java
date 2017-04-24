@@ -11,9 +11,15 @@ import swe.engine.Portfolio;
 import swe.engine.StockType;
 import swe.engine.traders.RandomTrader;
 
-class Setup {
-    ArrayList<Company> Companies = new ArrayList<>();
-    ArrayList<Portfolio> Clients = new ArrayList<>();
+public class Setup {
+
+    public ArrayList<Company> Companies;
+    public ArrayList<Portfolio> Clients;
+
+    public Setup() {
+        Companies = new ArrayList<>();
+        Clients = new ArrayList<>();
+    }
 
     void start() {
         System.out.println("Setup Starting...");
@@ -123,11 +129,16 @@ class Setup {
         
         // enter company closing price (31st December)
         System.out.println("Enter Company Closing Price: ");
-        int c_price = s.nextInt();
+        Float c_price = s.nextFloat();
         
         // create the new company and add it to the global companies array list.
-        Companies.add(new Company(c_name, selectedStockType, c_price));
+        addCompany(c_name, selectedStockType, c_price);
+        //Companies.add(new Company(c_name, selectedStockType, c_price));
         System.out.println("\nCompany '"+c_name+"' has been added!\n");
+    }
+
+    public void addCompany(String name, StockType selectedStockType, Float price) {
+        Companies.add(new Company(name, selectedStockType, price));
     }
 
     private void listCompanies() {
