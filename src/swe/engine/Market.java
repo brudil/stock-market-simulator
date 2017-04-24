@@ -172,8 +172,8 @@ public class Market {
 
     }
 
-    public int getShareIndex() {
+    public Float getShareIndex() {
         Random r = new Random();
-        return r.nextInt(100) + 1;
+        return new Float(r.nextInt(100) + 1);
     }
 }
