@@ -1,5 +1,6 @@
 package swe.engine;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class History {
@@ -28,5 +29,12 @@ public class History {
 
     public HistoryState getStateForTick(int i) {
         return ticksState[i];
+    }
+
+    public HistoryState[] getStateForEndOfEachDay() {
+        return Arrays
+                .stream(this.ticksState)
+                .filter(historyState -> historyState.tickIdentifier.isEndOfDay)
+                .toArray(HistoryState[]::new);
     }
 }
