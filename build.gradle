@@ -1,3 +1,8 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "1.2.4"
+}
+
+
 apply plugin: 'application'
 
 mainClassName = "swe.Main"
@@ -16,4 +21,10 @@ dependencies {
 
 javadoc {
     source = sourceSets.main.java.srcDirs
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'swe.Main'
+    }
 }
