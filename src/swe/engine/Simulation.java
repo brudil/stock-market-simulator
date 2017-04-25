@@ -17,8 +17,8 @@ public class Simulation {
     private SimulationCalendar simulationCalendar;
 
 
-    public Simulation(ArrayList<Company> companies, ArrayList<Portfolio> portfolios) {
-        this.market = new Market(companies, portfolios);
+    public Simulation(ArrayList<Company> companies, ArrayList<Portfolio> portfolios, SharesMap shares) {
+        this.market = new Market(companies, portfolios, shares);
         this.simulationCalendar = new SimulationCalendar(new SimulationEvent[10]);
         this.history = new History(simulationCalendar.getTickCount());
 
@@ -30,6 +30,8 @@ public class Simulation {
         for(TickIdentifier tick : this.simulationCalendar.getAllTickIdentifiers()) {
             this.performTick(tick);
         }
+
+        System.out.println(this.history.getStateForEndOfEachDay().length);
     }
 
     public History getHistory() {

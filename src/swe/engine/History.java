@@ -37,4 +37,10 @@ public class History {
                 .filter(historyState -> historyState.tickIdentifier.isEndOfDay)
                 .toArray(HistoryState[]::new);
     }
+
+    public Float[] getEndOfDayShareIndex() {
+        return Arrays.stream(this.getStateForEndOfEachDay())
+                .map(state -> (float) state.shareIndex)
+                .toArray(Float[]::new);
+    }
 }

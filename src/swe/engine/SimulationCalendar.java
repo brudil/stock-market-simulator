@@ -23,12 +23,12 @@ public class SimulationCalendar {
         int tickId = 0;
         // Set sim start time
         Calendar calendar = new GregorianCalendar(2017, 0, 1, 9, 0);
+        Calendar endDate = new GregorianCalendar(2018, Calendar.JANUARY, 1, 0, 0);
 
-        // TODO: Use while and endSimulationDate
-        for(int t = 0; t < 28 * 365; t++) {
-            SimulationCalendar.updateDateForNextTick(calendar);
+        while (calendar.before(endDate)) {
             flexibleTicks.add(new TickIdentifier((Calendar) calendar.clone(), tickId));
 
+            SimulationCalendar.updateDateForNextTick(calendar);
             tickId += 1;
         }
 
