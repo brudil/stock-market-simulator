@@ -7,6 +7,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.CategoryDataset;
@@ -17,6 +18,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import swe.engine.*;
 import swe.engine.traders.RandomInnerTraders;
 import swe.engine.traders.RandomTrader;
+import swe.setup.Setup;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -32,13 +34,14 @@ import java.util.Random;
  */
 public class SweUserInterface extends JFrame {
 
-    private JButton buttonStart;
+    public Setup setup;
     private int currentDay = 1;
     private Float[] data = new Float[300];
     private Simulation simulation;
     private History history;
 
     public SweUserInterface() {
+        setup = new Setup();
         // create the GUI
         createGUI();
 
@@ -95,9 +98,25 @@ public class SweUserInterface extends JFrame {
         buttonStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                simulation = new Simulation(setup.Companies, setup.Clients, setup.Shares);
                 simulation.runSimulation();
                 history = simulation.getHistory();
                 data = initialiseIndexDataset(history);
+            }
+        });
+
+        // reset button
+        JButton buttonReset = new JButton("Reset");
+        toolbar.add(buttonReset);
+        buttonReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setup = new Setup();
+                currentDay = 1;
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
             }
         });
 
@@ -108,21 +127,19 @@ public class SweUserInterface extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // create test arrays
-                ArrayList<Company> companies = new ArrayList<>();
-                companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
-                ArrayList<Portfolio> portfolios = new ArrayList<>();
-                portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
+                //ArrayList<Company> companies = new ArrayList<>();
+                //companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
+                //ArrayList<Portfolio> portfolios = new ArrayList<>();
+                //portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
                 // create test shares map
-                SharesMap shares = new SharesMap();
-
-                simulation = new Simulation(companies, portfolios, shares);
-
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new SetupUserInterface().setVisible(true);
-                    }
-                });
+                //SharesMap shares = new SharesMap();
+                SetupUserInterface set = new SetupUserInterface(setup);
+                set.setVisible(true);
+                setup = set.getS();
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
             }
         });
 
@@ -201,7 +218,12 @@ public class SweUserInterface extends JFrame {
                 PlotOrientation.VERTICAL,
                 true, true, false);
 
+        CategoryPlot plot = (CategoryPlot) barChart.getPlot();
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setRange(0, 10000);
+
         ChartPanel chartPanel = new ChartPanel( barChart );
+
         return chartPanel;
     }
 
@@ -209,11 +231,15 @@ public class SweUserInterface extends JFrame {
         final String client = "CLIENT WORTH";
         final DefaultCategoryDataset dataset =
                 new DefaultCategoryDataset();
+        Random rand = new Random();
+        for (int i = 0; i < setup.Clients.size(); i++) {
+            dataset.addValue(rand.nextInt(10000)+1, setup.Clients.get(i).getName(), setup.Clients.get(i).getName());
+        }
 
-        dataset.addValue( 1.0 , client,"Bob" );
-        dataset.addValue( 3.0 , client,"Joe" );
-        dataset.addValue( 5.0 , client,"Fred" );
-        dataset.addValue( 5.0 , client,"Greg" );
+        //dataset.addValue( 1.0 , client,"Bob" );
+        //dataset.addValue( 3.0 , client,"Joe" );
+        //dataset.addValue( 5.0 , client,"Fred" );
+        //dataset.addValue( 5.0 , client,"Greg" );
 
         return dataset;
     }

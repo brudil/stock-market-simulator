@@ -1,6 +1,8 @@
 package swe.engine;
 
-public class Share {
+import java.io.Serializable;
+
+public class Share implements Serializable {
     private int numberOfShares;
 
     public Share(int numberOfShares) {

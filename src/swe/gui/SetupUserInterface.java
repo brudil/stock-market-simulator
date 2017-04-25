@@ -15,14 +15,17 @@ import java.awt.event.KeyEvent;
 /**
  * Created by Fin on 24/04/2017.
  */
-public class SetupUserInterface extends JFrame {
+public class SetupUserInterface extends JDialog {
 
     Setup s;
 
-    public SetupUserInterface() {
-        // create setup
-        s = new Setup();
+    public Setup getS() {
+        return s;
+    }
 
+    public SetupUserInterface(Setup setup) {
+
+        s = setup;
         // create the GUI
         createGUI();
 
@@ -55,11 +58,38 @@ public class SetupUserInterface extends JFrame {
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                String filename = (String)JOptionPane.showInputDialog(
+                        JOptionPane.getRootFrame(),
+                        "File Name: ",
+                        "Enter File Name",
+                        JOptionPane.PLAIN_MESSAGE);
+                s.save(filename);
             }
         });
         JMenuItem load = new JMenuItem("Load");
+        load.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String filename = (String)JOptionPane.showInputDialog(
+                        JOptionPane.getRootFrame(),
+                        "File Name: ",
+                        "Enter File Name",
+                        JOptionPane.PLAIN_MESSAGE);
+                s.load(filename);
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
+            }
+        });
         JMenuItem exit = new JMenuItem("Exit");
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog currentFrame = (JDialog) SwingUtilities.getWindowAncestor(panel);
+                currentFrame.dispose();
+            }
+        });
         //add to the panel
         file.add(save);
         file.add(load);
@@ -137,12 +167,9 @@ public class SetupUserInterface extends JFrame {
                 repaint();
             }
         });
-        // create edit company button
-        JButton buttonEditComp = new JButton("Edit Company");
 
         // add buttons to panel
         buttonPanel.add(buttonAddComp);
-        buttonPanel.add(buttonEditComp);
 
         panelCompanies.add(buttonPanel);
 
@@ -180,7 +207,6 @@ public class SetupUserInterface extends JFrame {
             public void actionPerformed(ActionEvent e)
             {
                 int modelRow = Integer.valueOf( e.getActionCommand() );
-                System.out.println(modelRow);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -227,12 +253,9 @@ public class SetupUserInterface extends JFrame {
                 repaint();
             }
         });
-        // create edit company button
-        JButton buttonEditClient = new JButton("Edit Client");
 
         // add buttons to panel
         buttonPanel.add(buttonAddClient);
-        buttonPanel.add(buttonEditClient);
 
         panelClients.add(buttonPanel);
 
