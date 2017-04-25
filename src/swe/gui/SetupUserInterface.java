@@ -15,14 +15,17 @@ import java.awt.event.KeyEvent;
 /**
  * Created by Fin on 24/04/2017.
  */
-public class SetupUserInterface extends JFrame {
+public class SetupUserInterface extends JDialog {
 
     Setup s;
 
-    public SetupUserInterface() {
-        // create setup
-        s = new Setup();
+    public Setup getS() {
+        return s;
+    }
 
+    public SetupUserInterface(Setup setup) {
+
+        s = setup;
         // create the GUI
         createGUI();
 
@@ -158,11 +161,17 @@ public class SetupUserInterface extends JFrame {
             }
         });
         // create edit company button
-        JButton buttonEditComp = new JButton("Edit Company");
+        JButton buttonApply = new JButton("Apply Setup");
+        buttonApply.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
 
         // add buttons to panel
         buttonPanel.add(buttonAddComp);
-        buttonPanel.add(buttonEditComp);
+        buttonPanel.add(buttonApply);
 
         panelCompanies.add(buttonPanel);
 
@@ -200,7 +209,6 @@ public class SetupUserInterface extends JFrame {
             public void actionPerformed(ActionEvent e)
             {
                 int modelRow = Integer.valueOf( e.getActionCommand() );
-                System.out.println(modelRow);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {

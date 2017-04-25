@@ -28,4 +28,9 @@ public class Company implements Serializable {
     void printName() {
         System.out.println(this.name);
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

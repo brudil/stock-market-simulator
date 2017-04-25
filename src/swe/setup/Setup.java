@@ -309,7 +309,7 @@ public class Setup {
             // Now do the save.
             save.writeObject(Companies);
             save.writeObject(Clients);
-            save.writeObject(Shares);
+             save.writeObject(Shares);
 
             // Close the file.
             save.close();
