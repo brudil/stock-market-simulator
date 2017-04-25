@@ -17,8 +17,8 @@ public class Simulation {
     private SimulationCalendar simulationCalendar;
 
 
-    public Simulation(ArrayList<Company> companies, ArrayList<Portfolio> portfolios) {
-        this.market = new Market(companies, portfolios);
+    public Simulation(ArrayList<Company> companies, ArrayList<Portfolio> portfolios, SharesMap shares) {
+        this.market = new Market(companies, portfolios, shares);
         this.simulationCalendar = new SimulationCalendar(new SimulationEvent[10]);
         this.history = new History(simulationCalendar.getTickCount());
 
@@ -60,16 +60,5 @@ public class Simulation {
         // 6) done
 
         this.history.commitTick(tick, this.market);
-    }
-
-    public static void main(String args[]) {
-        ArrayList<Company> companies = new ArrayList<>();
-        companies.add(new Company("Monsters Inc.", StockType.HITECH, 300));
-
-        ArrayList<Portfolio> portfolios = new ArrayList<>();
-        portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
-
-        Simulation sim = new Simulation(companies, portfolios);
-        sim.runSimulation();
     }
 }

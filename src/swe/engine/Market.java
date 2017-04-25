@@ -13,28 +13,27 @@ import java.util.stream.Stream;
 public class Market {
     private ArrayList<Company> companies;
     private ArrayList<Portfolio> portfolios;
-    private HashMap<Company, HashMap<Portfolio, Share>> companyShares;
-    private HashMap<Portfolio, HashMap<Company, Share>> portfolioShares;
-    private int shareIndex = 20;
+    private SharesMap shares;
 
-    public Market(ArrayList<Company> companies, ArrayList<Portfolio> portfolios) {
+    public Market(ArrayList<Company> companies, ArrayList<Portfolio> portfolios, SharesMap sharesMap) {
         this.companies = companies;
         this.portfolios = portfolios;
-    }
-
-    public HashMap<Portfolio, Share> getSharesForCompany(Company company) {
-        return this.companyShares.getOrDefault(company, null);
-    }
-
-    public HashMap<Company, Share> getSharesForPortfolio(Portfolio portfolio) {
-        return this.portfolioShares.getOrDefault(portfolio, null);
+        this.shares = sharesMap;
     }
 
     public ArrayList<Portfolio> getPortfolios() {
         return this.portfolios;
     }
 
+    public SharesMap getShares() {
+        return this.shares;
+    }
+
     public MarketStatus getMarketStatus() {
+        // TODO: Implement plz
+/*      A bear market is defined as one where the
+        share index has fallen for 3 consecutive trading days. A bull market is defined as one where the
+        share index has risen for 3 consecutive trading days."*/
         return MarketStatus.BEAR;
     }
 
@@ -72,16 +71,6 @@ public class Market {
     }
 
     /**
-     * @param company
-     * @param portfolio
-     * @return Mutable share object
-     */
-    private Share getSharesForCompanyInPortfolio(Company company, Portfolio portfolio) {
-        return this.companyShares.get(company).get(portfolio);
-    }
-
-
-    /**
      * Sells shares in a company
      * Does not ensure consistency
      * @param company Company of shares to sell
@@ -89,7 +78,7 @@ public class Market {
      * @param amount Quantity of shares to sell. larger than 0
      */
     private void sellSharesInPortfolio(Company company, Portfolio portfolio, int amount) {
-        Share share = this.getSharesForCompanyInPortfolio(company, portfolio);
+        Share share = this.shares.getSharesForCompanyInPortfolio(company, portfolio);
         share.deltaSharesBy(-amount);
     }
 
@@ -102,7 +91,7 @@ public class Market {
      * @param amount Quantity of shares to buy. larger than 0
      */
     private void buySharesInPortfolio(Company company, Portfolio portfolio, int amount) {
-        Share share = this.getSharesForCompanyInPortfolio(company, portfolio);
+        Share share = this.shares.getSharesForCompanyInPortfolio(company, portfolio);
         share.deltaSharesBy(amount);
     }
 
@@ -110,7 +99,6 @@ public class Market {
         this.sellSharesInPortfolio(company, portfolioFrom, amount);
         this.buySharesInPortfolio(company, portfolioTo, amount);
     }
-
 
     /**
      * Does best attempt trades for portfolios trading a certain company

@@ -40,7 +40,11 @@ public class Portfolio implements Serializable {
     }
 
     public HashMap<Company, Share> getShares() {
-        return this.market.getSharesForPortfolio(this);
+        return this.market.getShares().getSharesForPortfolio(this);
+    }
+
+    public void getPercentageOfSharesRandom(float percentage) {
+        
     }
 
     public void addNewShare(Company c, int NoOfShares) {
