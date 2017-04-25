@@ -33,7 +33,7 @@ public class MarketTest {
         portfolios.add(fooPort);
         portfolios.add(barPort);
 
-        market = new Market(companies, portfolios);
+        market = new Market(companies, portfolios, new SharesMap());
     }
 
 
