@@ -83,6 +83,13 @@ public class SetupUserInterface extends JDialog {
             }
         });
         JMenuItem exit = new JMenuItem("Exit");
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog currentFrame = (JDialog) SwingUtilities.getWindowAncestor(panel);
+                currentFrame.dispose();
+            }
+        });
         //add to the panel
         file.add(save);
         file.add(load);
@@ -160,18 +167,9 @@ public class SetupUserInterface extends JDialog {
                 repaint();
             }
         });
-        // create edit company button
-        JButton buttonApply = new JButton("Apply Setup");
-        buttonApply.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
 
         // add buttons to panel
         buttonPanel.add(buttonAddComp);
-        buttonPanel.add(buttonApply);
 
         panelCompanies.add(buttonPanel);
 
@@ -255,12 +253,9 @@ public class SetupUserInterface extends JDialog {
                 repaint();
             }
         });
-        // create edit company button
-        JButton buttonEditClient = new JButton("Edit Client");
 
         // add buttons to panel
         buttonPanel.add(buttonAddClient);
-        buttonPanel.add(buttonEditClient);
 
         panelClients.add(buttonPanel);
 

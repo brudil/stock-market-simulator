@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by Fin on 25/04/2017.
  */
-public class PortfolioUserInterface extends JFrame {
+public class PortfolioUserInterface extends JDialog {
 
     Setup s;
     Portfolio p;
@@ -107,6 +107,15 @@ public class PortfolioUserInterface extends JFrame {
         });
 
         panel.add(addShareButton);
+        JButton closeButton = new JButton("Done");
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog currentFrame = (JDialog) SwingUtilities.getWindowAncestor(panel);
+                currentFrame.dispose();
+            }
+        });
+        panel.add(closeButton);
 
         return panel;
     }
