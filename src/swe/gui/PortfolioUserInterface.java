@@ -1,6 +1,11 @@
 package swe.gui;
 
+import swe.engine.Company;
 import swe.engine.Portfolio;
+import swe.engine.Share;
+import swe.engine.StockType;
+import swe.engine.traders.RandomTrader;
+import swe.engine.traders.Trader;
 import swe.setup.Setup;
 
 import javax.swing.*;
@@ -64,6 +69,44 @@ public class PortfolioUserInterface extends JFrame {
 
         // add share table panel
         panel.add(getShareTablePanel());
+        panel.add(getButtonPanel());
+
+        return panel;
+    }
+
+    private JPanel getButtonPanel() {
+        JPanel panel = new JPanel();
+        JButton addShareButton = new JButton("Add Share");
+        addShareButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] possibilities = new Object[s.Companies.size()];
+                for (int i = 0; i < s.Companies.size(); i++) {
+                    possibilities[i] = s.Companies.get(i);
+                }
+                Company company = (Company)JOptionPane.showInputDialog(
+                        JOptionPane.getRootFrame(),
+                        "Company:",
+                        "Choose Company",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        possibilities,
+                        null);
+                int noOfShares = Integer.parseInt(
+                        (String)JOptionPane.showInputDialog(
+                                JOptionPane.getRootFrame(),
+                                "Number Of Shares: ",
+                                "Enter Number Of Shares",
+                                JOptionPane.PLAIN_MESSAGE));
+                s.Shares.setShares(company, p, noOfShares);
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
+            }
+        });
+
+        panel.add(addShareButton);
 
         return panel;
     }
@@ -79,9 +122,9 @@ public class PortfolioUserInterface extends JFrame {
         };
 
         for (int i = 0; i < s.Companies.size(); i++) {
-            Object[] row = {s.Companies.get(i).getName(),
-                    p.getShares().get(s.Companies.get(i))
-            };
+            Share share = s.Shares.getSharesForCompanyInPortfolio(s.Companies.get(i), p);
+            int n = share.getNumberOfShares();
+            Object[] row = {s.Companies.get(i).getName(), n};
             model.addRow(row);
         }
 

@@ -179,8 +179,8 @@ public class SetupUserInterface extends JFrame {
         {
             public void actionPerformed(ActionEvent e)
             {
-                JTable table = (JTable)e.getSource();
                 int modelRow = Integer.valueOf( e.getActionCommand() );
+                System.out.println(modelRow);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {

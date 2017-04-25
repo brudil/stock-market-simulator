@@ -112,8 +112,10 @@ public class SweUserInterface extends JFrame {
                 companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
                 ArrayList<Portfolio> portfolios = new ArrayList<>();
                 portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
+                // create test shares map
+                SharesMap shares = new SharesMap();
 
-                simulation = new Simulation(companies, portfolios);
+                simulation = new Simulation(companies, portfolios, shares);
 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override

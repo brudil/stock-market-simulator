@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import swe.engine.Company;
 import swe.engine.Portfolio;
+import swe.engine.SharesMap;
 import swe.engine.StockType;
 import swe.engine.traders.RandomTrader;
 import swe.engine.traders.Trader;
@@ -16,10 +17,12 @@ public class Setup {
 
     public ArrayList<Company> Companies;
     public ArrayList<Portfolio> Clients;
+    public SharesMap Shares;
 
     public Setup() {
         Companies = new ArrayList<>();
         Clients = new ArrayList<>();
+        Shares = new SharesMap();
     }
 
     void start() {
@@ -79,7 +82,7 @@ public class Setup {
                     break; // This break is not really necessary
             }
         }
-    }  
+    }
 
     private void addNewCompany() {      
         // create a scanner
@@ -306,6 +309,7 @@ public class Setup {
             // Now do the save.
             save.writeObject(Companies);
             save.writeObject(Clients);
+            save.writeObject(Shares);
 
             // Close the file.
             save.close();
