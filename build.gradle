@@ -4,6 +4,7 @@ plugins {
 
 
 apply plugin: 'application'
+apply plugin: "jacoco"
 
 mainClassName = "swe.Main"
 
@@ -26,5 +27,13 @@ javadoc {
 jar {
     manifest {
         attributes 'Main-Class': 'swe.Main'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
     }
 }
