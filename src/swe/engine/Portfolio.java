@@ -43,6 +43,10 @@ public class Portfolio implements Serializable {
         return this.market.getSharesForPortfolio(this);
     }
 
+    public Trader getTrader() {
+        return trader;
+    }
+
     public void addNewShare(Company c, int NoOfShares) {
         // this.market.deltaSharesForPortfolio(new Share(c, NoOfShares));
     }

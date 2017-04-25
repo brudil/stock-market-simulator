@@ -85,4 +85,8 @@ public class RandomTrader extends Trader {
         return this.balancedTrader;
     }
 
+    @Override
+    public String toString() {
+        return "Random";
+    }
 }

@@ -10,6 +10,7 @@ import swe.engine.Company;
 import swe.engine.Portfolio;
 import swe.engine.StockType;
 import swe.engine.traders.RandomTrader;
+import swe.engine.traders.Trader;
 
 public class Setup {
 
@@ -139,6 +140,10 @@ public class Setup {
 
     public void addCompany(String name, StockType selectedStockType, Float price) {
         Companies.add(new Company(name, selectedStockType, price));
+    }
+
+    public void addClient(String name, Trader trader, Double cash) {
+        Clients.add(new Portfolio(name, cash, trader));
     }
 
     private void listCompanies() {
@@ -271,6 +276,28 @@ public class Setup {
             System.out.println("Enter File Name: ");
             String name = keyboard.nextLine();
 
+            FileOutputStream saveFile=new FileOutputStream(name+".config");
+
+            // Create an ObjectOutputStream to put objects into save file.
+            ObjectOutputStream save = new ObjectOutputStream(saveFile);
+
+            // Now do the save.
+            save.writeObject(Companies);
+            save.writeObject(Clients);
+
+            // Close the file.
+            save.close();
+        }
+        catch(Exception exc){
+            exc.printStackTrace(); // If there was an error, print the info.
+        }
+    }
+
+    public void save(String name) {
+        // try to open the file and save the 2 array lists
+        try{
+            // Catch errors in I/O if necessary.
+            // Open a file to write to.
             FileOutputStream saveFile=new FileOutputStream(name+".config");
 
             // Create an ObjectOutputStream to put objects into save file.
