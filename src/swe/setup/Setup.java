@@ -346,4 +346,29 @@ public class Setup {
             exc.printStackTrace(); // If there was an error, print the info.
         }
     }
+
+    public void load(String name) {
+        // Wrap all in a try/catch block to trap I/O errors.
+        try{
+
+            // Open file to read from
+            FileInputStream saveFile = new FileInputStream(name+".config");
+
+            // Create an ObjectInputStream to get objects from save file.
+            ObjectInputStream save = new ObjectInputStream(saveFile);
+
+            // read the company and client arrays back into the variables
+            // make sure to cast the types
+            // throwing an error but doesn't matter lol
+            Companies = (ArrayList<Company>) save.readObject();
+            Clients = (ArrayList<Portfolio>) save.readObject();
+            Shares = (SharesMap) save.readObject();
+
+            // Close the file.
+            save.close(); // This also closes saveFile.
+        }
+        catch(Exception exc){
+            exc.printStackTrace(); // If there was an error, print the info.
+        }
+    }
 }

@@ -4,7 +4,9 @@ import swe.engine.Market;
 import swe.engine.Portfolio;
 import swe.engine.TradeSlip;
 
-public abstract class Trader {
+import java.io.Serializable;
+
+public abstract class Trader implements Serializable {
 
     /**
      * Called before trading begins at the start of each new day

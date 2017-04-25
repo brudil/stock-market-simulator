@@ -55,10 +55,30 @@ public class SetupUserInterface extends JFrame {
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                String filename = (String)JOptionPane.showInputDialog(
+                        JOptionPane.getRootFrame(),
+                        "File Name: ",
+                        "Enter File Name",
+                        JOptionPane.PLAIN_MESSAGE);
+                s.save(filename);
             }
         });
         JMenuItem load = new JMenuItem("Load");
+        load.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String filename = (String)JOptionPane.showInputDialog(
+                        JOptionPane.getRootFrame(),
+                        "File Name: ",
+                        "Enter File Name",
+                        JOptionPane.PLAIN_MESSAGE);
+                s.load(filename);
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
+            }
+        });
         JMenuItem exit = new JMenuItem("Exit");
         //add to the panel
         file.add(save);
