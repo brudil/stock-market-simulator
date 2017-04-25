@@ -24,6 +24,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -33,7 +34,7 @@ public class SweUserInterface extends JFrame {
 
     private JButton buttonStart;
     private int currentDay = 1;
-    private int[] data = new int[364];
+    private Float[] data = new Float[300];
     private Simulation simulation;
     private History history;
 
@@ -52,14 +53,10 @@ public class SweUserInterface extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private int[] initialiseIndexDataset(History h) {
-        Random rand = new Random();
-        int[] d = new int[364];
-        for(int i = 0; i < 364; i++) {
-            d[i] = h.getStateForTick(i*28).shareIndex;
-            //d[i] = rand.nextInt(100) + 1;
-        }
-        return d;
+    private Float[] initialiseIndexDataset(History h) {
+        return Arrays.stream(h.getStateForEndOfEachDay())
+                .map(state -> state.shareIndex)
+                .toArray(Float[]::new);
     }
 
 //    public static void main(String[] args) {
@@ -112,11 +109,20 @@ public class SweUserInterface extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // create test arrays
                 ArrayList<Company> companies = new ArrayList<>();
-                companies.add(new Company("Monsters Inc.", StockType.HITECH, 300));
+                companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
                 ArrayList<Portfolio> portfolios = new ArrayList<>();
                 portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
+                // create test shares map
+                SharesMap shares = new SharesMap();
 
-                simulation = new Simulation(companies, portfolios);
+                simulation = new Simulation(companies, portfolios, shares);
+
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new SetupUserInterface().setVisible(true);
+                    }
+                });
             }
         });
 
@@ -172,7 +178,7 @@ public class SweUserInterface extends JFrame {
         ValueAxis yAxis = xyPlot.getRangeAxis();
 
         // set the range of the axis
-        xAxis.setRange(0.0, 365);
+        xAxis.setRange(0.0, data.length);
         yAxis.setRange(0.0, 100);
 
         // set the tick amount (units)

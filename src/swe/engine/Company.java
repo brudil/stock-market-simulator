@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class Company implements Serializable {
     String name;
     StockType stockType;
-    int price;
+    Float price;
 
-    public Company(String name, StockType stockType, int price) {
+    public Company(String name, StockType stockType, Float price) {
         this.name = name;
         this.stockType = stockType;
         this.price = price;
@@ -17,7 +17,7 @@ public class Company implements Serializable {
         return this.name;
     }
 
-    public int getPrice() {
+    public Float getPrice() {
         return this.price;
     }
 

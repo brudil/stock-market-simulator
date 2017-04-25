@@ -8,12 +8,22 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import swe.engine.Company;
 import swe.engine.Portfolio;
+import swe.engine.SharesMap;
 import swe.engine.StockType;
 import swe.engine.traders.RandomTrader;
+import swe.engine.traders.Trader;
 
-class Setup {
-    ArrayList<Company> Companies = new ArrayList<>();
-    ArrayList<Portfolio> Clients = new ArrayList<>();
+public class Setup {
+
+    public ArrayList<Company> Companies;
+    public ArrayList<Portfolio> Clients;
+    public SharesMap Shares;
+
+    public Setup() {
+        Companies = new ArrayList<>();
+        Clients = new ArrayList<>();
+        Shares = new SharesMap();
+    }
 
     void start() {
         System.out.println("Setup Starting...");
@@ -72,7 +82,7 @@ class Setup {
                     break; // This break is not really necessary
             }
         }
-    }  
+    }
 
     private void addNewCompany() {      
         // create a scanner
@@ -123,11 +133,20 @@ class Setup {
         
         // enter company closing price (31st December)
         System.out.println("Enter Company Closing Price: ");
-        int c_price = s.nextInt();
+        Float c_price = s.nextFloat();
         
         // create the new company and add it to the global companies array list.
-        Companies.add(new Company(c_name, selectedStockType, c_price));
+        addCompany(c_name, selectedStockType, c_price);
+        //Companies.add(new Company(c_name, selectedStockType, c_price));
         System.out.println("\nCompany '"+c_name+"' has been added!\n");
+    }
+
+    public void addCompany(String name, StockType selectedStockType, Float price) {
+        Companies.add(new Company(name, selectedStockType, price));
+    }
+
+    public void addClient(String name, Trader trader, Double cash) {
+        Clients.add(new Portfolio(name, cash, trader));
     }
 
     private void listCompanies() {
@@ -268,6 +287,29 @@ class Setup {
             // Now do the save.
             save.writeObject(Companies);
             save.writeObject(Clients);
+
+            // Close the file.
+            save.close();
+        }
+        catch(Exception exc){
+            exc.printStackTrace(); // If there was an error, print the info.
+        }
+    }
+
+    public void save(String name) {
+        // try to open the file and save the 2 array lists
+        try{
+            // Catch errors in I/O if necessary.
+            // Open a file to write to.
+            FileOutputStream saveFile=new FileOutputStream(name+".config");
+
+            // Create an ObjectOutputStream to put objects into save file.
+            ObjectOutputStream save = new ObjectOutputStream(saveFile);
+
+            // Now do the save.
+            save.writeObject(Companies);
+            save.writeObject(Clients);
+            save.writeObject(Shares);
 
             // Close the file.
             save.close();

@@ -6,6 +6,11 @@ public class SharesMap {
     private HashMap<Company, HashMap<Portfolio, Share>> companyShares;
     private HashMap<Portfolio, HashMap<Company, Share>> portfolioShares;
 
+    public SharesMap() {
+        companyShares = new HashMap<>();
+        portfolioShares = new HashMap<>();
+    }
+
     public void setShares(Company company, Portfolio portfolio, int shares) {
         Share share = new Share(shares);
         HashMap<Portfolio, Share> portfolioMap = this.companyShares.getOrDefault(company, new HashMap<>());
@@ -30,6 +35,6 @@ public class SharesMap {
      * @return Mutable share object
      */
     public Share getSharesForCompanyInPortfolio(Company company, Portfolio portfolio) {
-        return this.companyShares.get(company).get(portfolio);
+        return this.companyShares.get(company).getOrDefault(portfolio, new Share(0));
     }
 }

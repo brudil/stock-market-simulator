@@ -1,12 +1,8 @@
 package swe;
 
-import swe.engine.*;
-import swe.engine.traders.RandomInnerTraders;
-import swe.engine.traders.RandomTrader;
 import swe.gui.SweUserInterface;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 class Main {
 

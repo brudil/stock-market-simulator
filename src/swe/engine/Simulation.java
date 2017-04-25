@@ -61,4 +61,15 @@ public class Simulation {
 
         this.history.commitTick(tick, this.market);
     }
+
+//    public static void main(String args[]) {
+//        ArrayList<Company> companies = new ArrayList<>();
+//        companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
+//
+//        ArrayList<Portfolio> portfolios = new ArrayList<>();
+//        portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
+//
+//        Simulation sim = new Simulation(companies, portfolios);
+//        sim.runSimulation();
+//    }
 }
