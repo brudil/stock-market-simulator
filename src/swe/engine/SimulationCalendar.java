@@ -58,8 +58,6 @@ public class SimulationCalendar {
 
             // check tomorrow isn't a special day
             SimulationCalendar.ensureIsViableDay(calendar);
-
-            // TODO: Killed off onDay -> move to Simulation
         }
     }
 

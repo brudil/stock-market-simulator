@@ -2,6 +2,8 @@ package swe.engine;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SharesMap implements Serializable {
     private HashMap<Company, HashMap<Portfolio, Share>> companyShares;
@@ -29,7 +31,28 @@ public class SharesMap implements Serializable {
     }
 
     public HashMap<Company, Share> getSharesForPortfolio(Portfolio portfolio) {
-        return this.portfolioShares.getOrDefault(portfolio, null);
+        if (!this.portfolioShares.containsKey(portfolio)) {
+            this.portfolioShares.put(portfolio, new HashMap<>());
+        }
+        return this.portfolioShares.get(portfolio);
+    }
+
+    public Map<Company, Integer> getRandomSharePercentageOfPortfolio(Portfolio portfolio, double percentage) {
+        HashMap<Company, Share> sharesInCompanies = this.getSharesForPortfolio(portfolio);
+
+        int totalCompanies = sharesInCompanies.size();
+
+        Map<Company, Integer> numericShares = sharesInCompanies
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> (int) Math.floor(e.getValue().getNumberOfShares() * (percentage / 100))
+            ));
+
+        // int totalShares = numericShares.entrySet().stream().map(Map.Entry::getValue).reduce(0, Integer::sum);
+
+        return numericShares;
     }
 
     /**

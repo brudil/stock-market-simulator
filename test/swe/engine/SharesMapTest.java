@@ -5,6 +5,9 @@ import org.junit.Test;
 import swe.engine.traders.RandomInnerTraders;
 import swe.engine.traders.RandomTrader;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class SharesMapTest {
@@ -44,4 +47,10 @@ public class SharesMapTest {
 
     }
 
+    @Test
+    public void getRandomSharePercentageOfPortfolio() throws Exception {
+        shares.setShares(companyA, portA, 443);
+
+        Map<Company, Integer> subsetShares = shares.getRandomSharePercentageOfPortfolio(portA, 2.00);
+    }
 }

@@ -21,13 +21,14 @@ public class RandomTrader extends Trader {
         this.balancedTrader = new BalancedTrader();
         this.aggressivePurchaserTrader = new AggressivePurchaserTrader();
         this.aggressiveSellerTrader = new AggressiveSellerTrader();
+        this.currentInnerTrader = RandomInnerTraders.BALANCED;
     }
 
     public RandomTrader(RandomInnerTraders initialInnerTrader) {
-        this.currentInnerTrader = initialInnerTrader;
         this.balancedTrader = new BalancedTrader();
         this.aggressivePurchaserTrader = new AggressivePurchaserTrader();
         this.aggressiveSellerTrader = new AggressiveSellerTrader();
+        this.currentInnerTrader = RandomInnerTraders.BALANCED;
     }
 
     public void onNewDay() {

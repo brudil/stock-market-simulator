@@ -21,8 +21,6 @@ public class Simulation {
         this.market = new Market(companies, portfolios, shares);
         this.simulationCalendar = new SimulationCalendar(new SimulationEvent[10]);
         this.history = new History(simulationCalendar.getTickCount());
-
-        // TODO: Gen date to tick mapping, then run ticks
     }
 
     public void runSimulation() {
@@ -47,6 +45,9 @@ public class Simulation {
         Calendar calendar = tick.calendar;
         System.out.println(calendar.get(Calendar.DAY_OF_WEEK) + " " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " @ " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
 
+        if (tick.isStartOfDay) {
+            this.market.getPortfolios().forEach(Portfolio::onNewDay);
+        }
 
         // 1) get sale offers and sought purchases
         HashMap<Portfolio, TradeSlip> trades = this.market.getRequestedPortfolioTrades();
@@ -61,15 +62,4 @@ public class Simulation {
 
         this.history.commitTick(tick, this.market);
     }
-
-//    public static void main(String args[]) {
-//        ArrayList<Company> companies = new ArrayList<>();
-//        companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
-//
-//        ArrayList<Portfolio> portfolios = new ArrayList<>();
-//        portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
-//
-//        Simulation sim = new Simulation(companies, portfolios);
-//        sim.runSimulation();
-//    }
 }

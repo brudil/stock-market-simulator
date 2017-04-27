@@ -11,6 +11,14 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 public class MarketTest {
+    @Test
+    public void getMarketStatus() throws Exception {
+    }
+
+    @Test
+    public void getShareIndex() throws Exception {
+    }
+
     Market market;
     Company aInc;
     Company bInc;
@@ -34,11 +42,5 @@ public class MarketTest {
         portfolios.add(barPort);
 
         market = new Market(companies, portfolios, new SharesMap());
-    }
-
-
-    @Test
-    public void getSharesForPortfolio() throws Exception {
-
     }
 }
