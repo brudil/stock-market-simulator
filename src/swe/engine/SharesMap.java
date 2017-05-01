@@ -1,11 +1,10 @@
 package swe.engine;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SharesMap implements Serializable {
+public class SharesMap {
     private HashMap<Company, HashMap<Portfolio, Share>> companyShares;
     private HashMap<Portfolio, HashMap<Company, Share>> portfolioShares;
 

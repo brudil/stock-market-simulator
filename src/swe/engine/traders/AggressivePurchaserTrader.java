@@ -15,6 +15,6 @@ public class AggressivePurchaserTrader extends Trader {
         Random r = new Random();
         Map<Company, Integer> purchase = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextFloat() * 2);
 
-        return null;
+        return ts;
     }
 }

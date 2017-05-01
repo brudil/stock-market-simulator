@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class RandomTrader extends Trader {
 
-    private RandomInnerTraders currentInnerTrader;
+    private RandomInnerTraders currentInnerTrader = RandomInnerTraders.BALANCED;
     private Trader balancedTrader;
     private Trader aggressivePurchaserTrader;
     private Trader aggressiveSellerTrader;
@@ -21,14 +21,12 @@ public class RandomTrader extends Trader {
         this.balancedTrader = new BalancedTrader();
         this.aggressivePurchaserTrader = new AggressivePurchaserTrader();
         this.aggressiveSellerTrader = new AggressiveSellerTrader();
-        this.currentInnerTrader = RandomInnerTraders.BALANCED;
     }
 
     public RandomTrader(RandomInnerTraders initialInnerTrader) {
         this.balancedTrader = new BalancedTrader();
         this.aggressivePurchaserTrader = new AggressivePurchaserTrader();
         this.aggressiveSellerTrader = new AggressiveSellerTrader();
-        this.currentInnerTrader = RandomInnerTraders.BALANCED;
     }
 
     public void onNewDay() {

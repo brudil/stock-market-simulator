@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 /**
  * Created by Fin on 24/04/2017.
@@ -58,12 +59,16 @@ public class SetupUserInterface extends JDialog {
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String filename = (String)JOptionPane.showInputDialog(
+                String filename = (String) JOptionPane.showInputDialog(
                         JOptionPane.getRootFrame(),
                         "File Name: ",
                         "Enter File Name",
                         JOptionPane.PLAIN_MESSAGE);
-                s.save(filename);
+                try {
+                    s.saveToFile(filename);
+                } catch (IOException e1) {
+                    System.out.println("Failed to save setup");
+                }
             }
         });
         JMenuItem load = new JMenuItem("Load");
@@ -75,7 +80,12 @@ public class SetupUserInterface extends JDialog {
                         "File Name: ",
                         "Enter File Name",
                         JOptionPane.PLAIN_MESSAGE);
-                s.load(filename);
+                // TODO: catch error in gui
+                try {
+                    s = Setup.loadFromFile(filename);
+                } catch (IOException err) {
+                    System.out.println("Setup load filed.");
+                }
                 JPanel panel = getMainPanel();
                 setContentPane(panel);
                 validate();

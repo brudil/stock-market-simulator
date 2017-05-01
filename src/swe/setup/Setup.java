@@ -1,11 +1,17 @@
 package swe.setup;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
 import swe.engine.Company;
 import swe.engine.Portfolio;
 import swe.engine.SharesMap;
@@ -296,29 +302,6 @@ public class Setup {
         }
     }
 
-    public void save(String name) {
-        // try to open the file and save the 2 array lists
-        try{
-            // Catch errors in I/O if necessary.
-            // Open a file to write to.
-            FileOutputStream saveFile=new FileOutputStream(name+".config");
-
-            // Create an ObjectOutputStream to put objects into save file.
-            ObjectOutputStream save = new ObjectOutputStream(saveFile);
-
-            // Now do the save.
-            save.writeObject(Companies);
-            save.writeObject(Clients);
-             save.writeObject(Shares);
-
-            // Close the file.
-            save.close();
-        }
-        catch(Exception exc){
-            exc.printStackTrace(); // If there was an error, print the info.
-        }
-    }
-
     public void loadConfig() {
         // Wrap all in a try/catch block to trap I/O errors.
         try{
@@ -347,28 +330,20 @@ public class Setup {
         }
     }
 
-    public void load(String name) {
-        // Wrap all in a try/catch block to trap I/O errors.
-        try{
 
-            // Open file to read from
-            FileInputStream saveFile = new FileInputStream(name+".config");
-
-            // Create an ObjectInputStream to get objects from save file.
-            ObjectInputStream save = new ObjectInputStream(saveFile);
-
-            // read the company and client arrays back into the variables
-            // make sure to cast the types
-            // throwing an error but doesn't matter lol
-            Companies = (ArrayList<Company>) save.readObject();
-            Clients = (ArrayList<Portfolio>) save.readObject();
-            Shares = (SharesMap) save.readObject();
-
-            // Close the file.
-            save.close(); // This also closes saveFile.
+    public static Setup loadFromFile(String filename) throws FileNotFoundException, IOException {
+        Path path = Paths.get("fixtures/" + filename + ".json");
+        if (!Files.exists(path)) {
+            throw new FileNotFoundException();
         }
-        catch(Exception exc){
-            exc.printStackTrace(); // If there was an error, print the info.
-        }
+
+        return (Setup) JsonReader.jsonToJava(new String(Files.readAllBytes(path), StandardCharsets.UTF_8));
+    }
+
+    public void saveToFile(String filename) throws IOException {
+        Path path = Paths.get("fixtures/" + filename + ".json");
+
+        String json = JsonWriter.objectToJson(this);
+        Files.write(path, json.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
     }
 }
