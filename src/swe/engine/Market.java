@@ -3,7 +3,6 @@ package swe.engine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,6 +18,10 @@ public class Market {
         this.companies = companies;
         this.portfolios = portfolios;
         this.shares = sharesMap;
+
+        for (Portfolio portfolio : portfolios) {
+            portfolio.setMarket(this);
+        }
     }
 
     public ArrayList<Portfolio> getPortfolios() {
@@ -61,7 +64,9 @@ public class Market {
         // TODO: refactor, ugly
         for (Map.Entry<Portfolio, TradeSlip> tradeSlip : trades.entrySet()) {
             for(Map.Entry<Company, Integer> trade : tradeSlip.getValue().entrySet()) {
-                tradesByCompany.getOrDefault(trade.getKey(), new HashMap<>()).put(tradeSlip.getKey(), trade.getValue());
+                HashMap<Portfolio, Integer> comp = tradesByCompany.getOrDefault(trade.getKey(), new HashMap<>());
+                comp.put(tradeSlip.getKey(), trade.getValue());
+                tradesByCompany.put(trade.getKey(), comp);
             }
         }
 
@@ -100,19 +105,25 @@ public class Market {
         this.buySharesInPortfolio(company, portfolioTo, amount);
     }
 
+    private static Stream<Map.Entry<Portfolio, Integer>> getBuyers(HashMap<Portfolio, Integer> portfolioDeltas) {
+        return portfolioDeltas.entrySet().stream().filter(set -> set.getValue() > 0);
+    }
+
+    private static Stream<Map.Entry<Portfolio, Integer>> getSellers(HashMap<Portfolio, Integer> portfolioDeltas) {
+        return portfolioDeltas.entrySet().stream()
+                .filter(set -> set.getValue() < 0);
+    }
+
     /**
      * Does best attempt trades for portfolios trading a certain company
      * @param company Company of shares to be traded
      * @param portfolioDeltas Map of delta change of shares to be traded
      */
     private void performBestAttemptTradesForCompany(Company company, HashMap<Portfolio, Integer> portfolioDeltas) {
-        // separate out our buyers and sellers
-        Stream<Map.Entry<Portfolio, Integer>> buyers = portfolioDeltas.entrySet().stream().filter(set -> set.getValue() > 0);
-        Stream<Map.Entry<Portfolio, Integer>> sellers = portfolioDeltas.entrySet().stream().filter(set -> set.getValue() < 0);
 
         // reduce those lists to total sell and buy amount
-        int totalBuy = buyers.map(Map.Entry::getValue).reduce(0, Integer::sum);
-        int totalSell = sellers.map(Map.Entry::getValue).reduce(0, Integer::sum) * -1;
+        int totalBuy = getBuyers(portfolioDeltas).map(Map.Entry::getValue).reduce(0, Integer::sum);
+        int totalSell = getSellers(portfolioDeltas).map(Map.Entry::getValue).reduce(0, Integer::sum) * -1;
 
         // if we have no buyers OR sellers abort
         if (totalBuy <= 0 || totalSell <= 0) {
@@ -120,15 +131,15 @@ public class Market {
         }
 
         if (totalBuy >= totalSell) {
-            Map<Portfolio, Integer> possibleBuy = buyers.collect(Collectors.toMap(
+            Map<Portfolio, Integer> possibleBuy = getBuyers(portfolioDeltas).collect(Collectors.toMap(
                     Map.Entry::getKey,
                     e -> totalSell * (e.getValue() / totalBuy)
             ));
 
             // sell all
-            int totalSold = sellers.map(seller -> {
-                this.sellSharesInPortfolio(company, seller.getKey(), seller.getValue());
-                return seller.getValue();
+            int totalSold = getSellers(portfolioDeltas).map(seller -> {
+                this.sellSharesInPortfolio(company, seller.getKey(), Math.abs(seller.getValue()));
+                return Math.abs(seller.getValue());
             }).reduce(0, Integer::sum);
 
             // buy what we can
@@ -137,31 +148,39 @@ public class Market {
                 return buyer.getValue();
             }).reduce(0, Integer::sum);
 
-
+            double excess = (double) totalBuy - (double) totalSell;
+            double div = excess / (double) shares.getTotalSharesForCompany(company);
+            company.setPrice(company.getPrice() + (div * company.getPrice()));
         } else {
-            Map<Portfolio, Integer> possibleSell = sellers.collect(Collectors.toMap(
+            Map<Portfolio, Integer> possibleSell = getSellers(portfolioDeltas).collect(Collectors.toMap(
                     Map.Entry::getKey,
-                    e -> totalSell * (e.getValue() / totalBuy)
+                    e -> totalBuy * (Math.abs(e.getValue()) / totalSell)
             ));
 
             // buy all
-            int totalBrought = sellers.map(seller -> {
+            int totalBrought = getBuyers(portfolioDeltas).map(seller -> {
                 this.buySharesInPortfolio(company, seller.getKey(), seller.getValue());
                 return seller.getValue();
             }).reduce(0, Integer::sum);
 
             // sell what we can
             int totalSold = possibleSell.entrySet().stream().map(seller -> {
-                this.sellSharesInPortfolio(company, seller.getKey(), seller.getValue());
-                return seller.getValue();
+                this.sellSharesInPortfolio(company, seller.getKey(), Math.abs(seller.getValue()));
+                return Math.abs(seller.getValue());
             }).reduce(0, Integer::sum);
+
+            double excess = (double) totalSell - (double) totalBuy;
+            double div = excess / (double) shares.getTotalSharesForCompany(company);
+            company.setPrice(company.getPrice() - (div * company.getPrice()));
         }
         // TODO: ensure what we have sold equals what was brought
-
     }
 
-    public Float getShareIndex() {
-        Random r = new Random();
-        return new Float(r.nextInt(100) + 1);
+    public double getShareIndex() {
+        // Get total of all companies share prices and then average them
+        double totalPrice =  companies.stream()
+                .mapToDouble(Company::getPrice).reduce(0.0, Double::sum);
+
+        return totalPrice / (double) companies.size();
     }
 }

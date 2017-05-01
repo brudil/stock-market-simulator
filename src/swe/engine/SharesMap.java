@@ -24,16 +24,24 @@ public class SharesMap {
         this.portfolioShares.put(portfolio, companyMap);
     }
 
-
-    public HashMap<Portfolio, Share> getSharesForCompany(Company company) {
-        return this.companyShares.getOrDefault(company, null);
-    }
-
     public HashMap<Company, Share> getSharesForPortfolio(Portfolio portfolio) {
         if (!this.portfolioShares.containsKey(portfolio)) {
             this.portfolioShares.put(portfolio, new HashMap<>());
         }
         return this.portfolioShares.get(portfolio);
+    }
+
+    public HashMap<Portfolio, Share> getSharesForCompany(Company company) {
+        if (!this.companyShares.containsKey(company)) {
+            this.companyShares.put(company, new HashMap<>());
+        }
+        return this.companyShares.get(company);
+    }
+
+    public int getTotalSharesForCompany(Company company) {
+        return getSharesForCompany(company).entrySet().stream()
+                .mapToInt(entry -> entry.getValue().getNumberOfShares())
+                .reduce(0, Integer::sum);
     }
 
     public Map<Company, Integer> getRandomSharePercentageOfPortfolio(Portfolio portfolio, double percentage) {

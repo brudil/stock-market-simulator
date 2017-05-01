@@ -35,7 +35,7 @@ public class SweUserInterface extends JFrame {
 
     public Setup setup;
     private int currentDay = 1;
-    private Float[] data = new Float[300];
+    private Double[] data = new Double[300];
     private Simulation simulation;
     private History history;
 
@@ -55,10 +55,10 @@ public class SweUserInterface extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private Float[] initialiseIndexDataset(History h) {
+    private Double[] initialiseIndexDataset(History h) {
         return Arrays.stream(h.getStateForEndOfEachDay())
                 .map(state -> state.shareIndex)
-                .toArray(Float[]::new);
+                .toArray(Double[]::new);
     }
 
 //    public static void main(String[] args) {
@@ -202,7 +202,7 @@ public class SweUserInterface extends JFrame {
 
         // set the range of the axis
         xAxis.setRange(0.0, data.length);
-        yAxis.setRange(0.0, 100);
+        yAxis.setRange(0.0, 10000);
 
         // set the tick amount (units)
         XYPlot plot = (XYPlot) lineChart.getPlot();
@@ -226,7 +226,7 @@ public class SweUserInterface extends JFrame {
 
         CategoryPlot plot = (CategoryPlot) barChart.getPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(0, 10000);
+        rangeAxis.setRange(0, 100);
 
         ChartPanel chartPanel = new ChartPanel( barChart );
 

@@ -13,7 +13,11 @@ public class AggressivePurchaserTrader extends Trader {
     public TradeSlip getRequestedTrades(Portfolio portfolio, Market market) {
         TradeSlip ts = new TradeSlip();
         Random r = new Random();
-        Map<Company, Integer> purchase = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextFloat() * 2);
+        Map<Company, Integer> purchase = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextDouble() * 2);
+        purchase.forEach((key, value) -> ts.put(key, ts.getOrDefault(key, 0) + value));
+
+        Map<Company, Integer> sell = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextDouble() * 0.5);
+        sell.forEach((key, value) -> ts.put(key, ts.getOrDefault(key, 0) + -value));
 
         return ts;
     }

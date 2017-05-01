@@ -42,4 +42,8 @@ public class History {
                 .map(state -> (float) state.shareIndex)
                 .toArray(Float[]::new);
     }
+
+    public double getHighestShareIndex() {
+        return Arrays.stream(ticksState).map(state -> state.shareIndex).max(Double::compare).get();
+    }
 }

@@ -21,7 +21,7 @@ public class Portfolio {
      * Required for many market based methods
      * @param market the market the portfolio is within
      */
-    protected void setMarket(Market market) {
+    public void setMarket(Market market) {
         this.market = market;
     }
 
@@ -42,7 +42,7 @@ public class Portfolio {
     }
 
     public void getPercentageOfSharesRandom(float percentage) {
-        
+
     }
 
     public Trader getTrader() {

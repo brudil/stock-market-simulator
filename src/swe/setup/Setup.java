@@ -139,15 +139,15 @@ public class Setup {
         
         // enter company closing price (31st December)
         System.out.println("Enter Company Closing Price: ");
-        Float c_price = s.nextFloat();
-        
+        double c_price = s.nextDouble();
+
         // create the new company and add it to the global companies array list.
         addCompany(c_name, selectedStockType, c_price);
         //Companies.add(new Company(c_name, selectedStockType, c_price));
         System.out.println("\nCompany '"+c_name+"' has been added!\n");
     }
 
-    public void addCompany(String name, StockType selectedStockType, Float price) {
+    public void addCompany(String name, StockType selectedStockType, double price) {
         Companies.add(new Company(name, selectedStockType, price));
     }
 

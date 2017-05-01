@@ -3,9 +3,9 @@ package swe.engine;
 public class Company {
     String name;
     StockType stockType;
-    Float price;
+    Double price;
 
-    public Company(String name, StockType stockType, Float price) {
+    public Company(String name, StockType stockType, Double price) {
         this.name = name;
         this.stockType = stockType;
         this.price = price;
@@ -15,8 +15,12 @@ public class Company {
         return this.name;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return this.price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public StockType getStockType() {
