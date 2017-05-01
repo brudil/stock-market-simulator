@@ -23,8 +23,7 @@ import swe.setup.Setup;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -134,8 +133,15 @@ public class SweUserInterface extends JFrame {
                 // create test shares map
                 //SharesMap shares = new SharesMap();
                 SetupUserInterface set = new SetupUserInterface(setup);
+                set.addHierarchyListener(new HierarchyListener() {
+                    @Override
+                    public void hierarchyChanged(HierarchyEvent e) {
+                        System.out.println("valid: " + set.isValid());
+                        System.out.println("showing: " + set.isShowing());
+                        setup = set.getS();
+                    }
+                });
                 set.setVisible(true);
-                setup = set.getS();
                 JPanel panel = getMainPanel();
                 setContentPane(panel);
                 validate();
