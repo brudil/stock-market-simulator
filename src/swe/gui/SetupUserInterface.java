@@ -32,7 +32,7 @@ public class SetupUserInterface extends JDialog {
 
         // set the frame size of the window
         //setSize(new Dimension(500, 400));
-        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // set title
         setTitle("Setup");
