@@ -21,12 +21,11 @@ import swe.engine.traders.RandomTrader;
 import swe.setup.Setup;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Fin on 23/04/2017.
@@ -36,6 +35,7 @@ public class SweUserInterface extends JFrame {
     public Setup setup;
     private int currentDay = 1;
     private Double[] data = new Double[300];
+    private Double[][] clientData = new Double[300][300];
     private Simulation simulation;
     private History history;
     private Timer timer;
@@ -62,10 +62,12 @@ public class SweUserInterface extends JFrame {
                 .toArray(Double[]::new);
     }
 
-    private Double[] initialiseClientDataset(History h) {
-        return Arrays.stream(h.getStateForEndOfEachDay())
-                .map(state -> state.shareIndex)
-                .toArray(Double[]::new);
+    private HashMap<Portfolio, Double> getAllClientWorthForDay(History h) {
+        if (simulation == null) {
+            return new HashMap<>();
+        } else {
+            return h.getStateForEndOfEachDay()[currentDay-1].portfolioWorth;
+        }
     }
 
 //    public static void main(String[] args) {
@@ -108,6 +110,7 @@ public class SweUserInterface extends JFrame {
                 simulation.runSimulation();
                 history = simulation.getHistory();
                 data = initialiseIndexDataset(history);
+                //clientData = initialiseClientDataset(history);
             }
         });
 
@@ -278,7 +281,7 @@ public class SweUserInterface extends JFrame {
 
         CategoryPlot plot = (CategoryPlot) barChart.getPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(0, 50000);
+        rangeAxis.setRange(0, 100000000);
 
         ChartPanel chartPanel = new ChartPanel( barChart );
 
@@ -290,9 +293,14 @@ public class SweUserInterface extends JFrame {
         final DefaultCategoryDataset dataset =
                 new DefaultCategoryDataset();
         Random rand = new Random();
-        for (int i = 0; i < setup.Clients.size(); i++) {
-            dataset.addValue(rand.nextInt(10000)+1, client, setup.Clients.get(i).getName());
+        HashMap<Portfolio, Double> worths = getAllClientWorthForDay(history);
+        for (Map.Entry<Portfolio, Double> entry : worths.entrySet()) {
+            dataset.addValue(entry.getValue(), client, entry.getKey().getName());
         }
+        if (simulation != null) {
+            System.out.println(worths.get(setup.Clients.get(0)));
+        }
+
         return dataset;
     }
 
