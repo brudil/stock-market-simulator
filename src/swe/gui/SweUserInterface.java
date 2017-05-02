@@ -21,12 +21,11 @@ import swe.engine.traders.RandomTrader;
 import swe.setup.Setup;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Fin on 23/04/2017.
@@ -36,14 +35,16 @@ public class SweUserInterface extends JFrame {
     public Setup setup;
     private int currentDay = 1;
     private Double[] data = new Double[300];
+    private Double[][] clientData = new Double[300][300];
     private Simulation simulation;
     private History history;
+    private Timer timer;
+    private boolean stopTimer = false;
 
     public SweUserInterface() {
         setup = new Setup();
         // create the GUI
         createGUI();
-
         // set the frame size of the window
         setSize(new Dimension(500, 400));
         // set a default close action
@@ -59,6 +60,14 @@ public class SweUserInterface extends JFrame {
         return Arrays.stream(h.getStateForEndOfEachDay())
                 .map(state -> state.shareIndex)
                 .toArray(Double[]::new);
+    }
+
+    private HashMap<Portfolio, Double> getAllClientWorthForDay(History h) {
+        if (simulation == null) {
+            return new HashMap<>();
+        } else {
+            return h.getStateForEndOfEachDay()[currentDay-1].portfolioWorth;
+        }
     }
 
 //    public static void main(String[] args) {
@@ -101,6 +110,42 @@ public class SweUserInterface extends JFrame {
                 simulation.runSimulation();
                 history = simulation.getHistory();
                 data = initialiseIndexDataset(history);
+                //clientData = initialiseClientDataset(history);
+            }
+        });
+
+        timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                //Refresh the panel
+                if (currentDay < 257 && !stopTimer){
+                        currentDay++;
+                        JPanel panel = getMainPanel();
+                        setContentPane(panel);
+                        validate();
+                        repaint();
+                    }
+                }
+        });
+
+        // GO button
+        JButton buttonGo = new JButton("Go");
+        toolbar.add(buttonGo);
+        buttonGo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stopTimer = false;
+                timer.start();
+            }
+        });
+
+        // PAUSE button
+        JButton buttonPause = new JButton("Pause");
+        toolbar.add(buttonPause);
+        buttonPause.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stopTimer = true;
             }
         });
 
@@ -156,7 +201,9 @@ public class SweUserInterface extends JFrame {
         buttonBack.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentDay--;
+                if (currentDay > 1) {
+                    currentDay--;
+                }
                 JPanel panel = getMainPanel();
                 setContentPane(panel);
                 validate();
@@ -175,7 +222,11 @@ public class SweUserInterface extends JFrame {
         buttonAdvance.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentDay++;
+                if (history != null) {
+                    if (currentDay < 257){
+                        currentDay++;
+                    }
+                }
                 JPanel panel = getMainPanel();
                 setContentPane(panel);
                 validate();
@@ -202,7 +253,11 @@ public class SweUserInterface extends JFrame {
 
         // set the range of the axis
         xAxis.setRange(0.0, data.length);
-        yAxis.setRange(0.0, 10000);
+        if (simulation == null) {
+            yAxis.setRange(0.0, 500);
+        } else {
+            yAxis.setRange(0.0, simulation.getHistory().getHighestShareIndex());
+        }
 
         // set the tick amount (units)
         XYPlot plot = (XYPlot) lineChart.getPlot();
@@ -226,7 +281,7 @@ public class SweUserInterface extends JFrame {
 
         CategoryPlot plot = (CategoryPlot) barChart.getPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(0, 100);
+        rangeAxis.setRange(0, 100000000);
 
         ChartPanel chartPanel = new ChartPanel( barChart );
 
@@ -238,14 +293,13 @@ public class SweUserInterface extends JFrame {
         final DefaultCategoryDataset dataset =
                 new DefaultCategoryDataset();
         Random rand = new Random();
-        for (int i = 0; i < setup.Clients.size(); i++) {
-            dataset.addValue(rand.nextInt(10000)+1, setup.Clients.get(i).getName(), setup.Clients.get(i).getName());
+        HashMap<Portfolio, Double> worths = getAllClientWorthForDay(history);
+        for (Map.Entry<Portfolio, Double> entry : worths.entrySet()) {
+            dataset.addValue(entry.getValue(), client, entry.getKey().getName());
         }
-
-        //dataset.addValue( 1.0 , client,"Bob" );
-        //dataset.addValue( 3.0 , client,"Joe" );
-        //dataset.addValue( 5.0 , client,"Fred" );
-        //dataset.addValue( 5.0 , client,"Greg" );
+        if (simulation != null) {
+            System.out.println(worths.get(setup.Clients.get(0)));
+        }
 
         return dataset;
     }
