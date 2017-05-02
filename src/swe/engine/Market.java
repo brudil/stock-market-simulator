@@ -32,14 +32,6 @@ public class Market {
         return this.shares;
     }
 
-    public MarketStatus getMarketStatus() {
-        // TODO: Implement plz
-/*      A bear market is defined as one where the
-        share index has fallen for 3 consecutive trading days. A bull market is defined as one where the
-        share index has risen for 3 consecutive trading days."*/
-        return MarketStatus.BEAR;
-    }
-
     public HashMap<Portfolio, TradeSlip> getRequestedPortfolioTrades() {
         HashMap<Portfolio, TradeSlip> trades = new HashMap<>();
         for (Portfolio portfolio : this.portfolios) {
@@ -179,8 +171,13 @@ public class Market {
     public double getShareIndex() {
         // Get total of all companies share prices and then average them
         double totalPrice =  companies.stream()
-                .mapToDouble(Company::getPrice).reduce(0.0, Double::sum);
+                .mapToDouble(Company::getPrice)
+                .reduce(0.0, Double::sum);
 
         return totalPrice / (double) companies.size();
+    }
+
+    public ArrayList<Company> getCompanies() {
+        return companies;
     }
 }

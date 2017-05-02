@@ -45,6 +45,12 @@ public class Portfolio {
 
     }
 
+    public double getWorth() {
+        return getCash() + getShares().entrySet().stream()
+                .map(entry -> entry.getKey().getPrice() * entry.getValue().getNumberOfShares())
+                .reduce(0.0, Double::sum);
+    }
+
     public Trader getTrader() {
         return trader;
     }
