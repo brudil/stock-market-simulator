@@ -16,7 +16,7 @@ public class AggressiveSellerTrader extends Trader {
         Map<Company, Integer> purchase = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextDouble() * 0.5);
         purchase.forEach((key, value) -> ts.put(key, ts.getOrDefault(key, 0) + value));
 
-        Map<Company, Integer> sell = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextDouble() * 1.5);
+        Map<Company, Integer> sell = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextDouble() * 2);
         sell.forEach((key, value) -> ts.put(key, ts.getOrDefault(key, 0) + -value));
 
         return ts;
