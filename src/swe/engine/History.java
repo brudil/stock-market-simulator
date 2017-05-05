@@ -1,6 +1,8 @@
 package swe.engine;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class History {
@@ -86,5 +88,9 @@ public class History {
 
     public double getHighestShareIndex() {
         return Arrays.stream(ticksState).map(state -> state.shareIndex).max(Double::compare).get();
+    }
+
+    public double getHighestClientWorth() {
+        return Arrays.stream(ticksState).map(state -> Collections.max(state.portfolioWorth.values())).max(Double::compare).get();
     }
 }

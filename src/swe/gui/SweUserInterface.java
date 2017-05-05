@@ -281,7 +281,11 @@ public class SweUserInterface extends JFrame {
 
         CategoryPlot plot = (CategoryPlot) barChart.getPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(0, 100000000);
+        if (simulation == null) {
+            rangeAxis.setRange(0.0, 1000000);
+        } else {
+            rangeAxis.setRange(0.0, simulation.getHistory().getHighestClientWorth());
+        }
 
         ChartPanel chartPanel = new ChartPanel( barChart );
 
@@ -296,9 +300,6 @@ public class SweUserInterface extends JFrame {
         HashMap<Portfolio, Double> worths = getAllClientWorthForDay(history);
         for (Map.Entry<Portfolio, Double> entry : worths.entrySet()) {
             dataset.addValue(entry.getValue(), client, entry.getKey().getName());
-        }
-        if (simulation != null) {
-            System.out.println(worths.get(setup.Clients.get(0)));
         }
 
         return dataset;
