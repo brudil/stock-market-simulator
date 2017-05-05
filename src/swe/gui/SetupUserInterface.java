@@ -85,7 +85,7 @@ public class SetupUserInterface extends JDialog {
                 try {
                     s = Setup.loadFromFile(filename);
                 } catch (IOException err) {
-                    System.out.println("Setup load filed.");
+                    System.out.println("Setup load failed.");
                 }
                 JPanel panel = getMainPanel();
                 setContentPane(panel);

@@ -4,12 +4,12 @@ import javafx.beans.value.ChangeListener;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
-import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.category.StackedBarRenderer3D;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
@@ -25,6 +25,8 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -40,6 +42,7 @@ public class SweUserInterface extends JFrame {
     private History history;
     private Timer timer;
     private boolean stopTimer = false;
+    private boolean loaded = false;
 
     public SweUserInterface() {
         setup = new Setup();
@@ -70,20 +73,22 @@ public class SweUserInterface extends JFrame {
         }
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                new SweUserInterface().setVisible(true);
-//            }
-//        });
-//    }
-
     private void createGUI() {
         // get the main panel
         JPanel panel = getMainPanel();
+        // load in the initial setup automatically
+        getInitialSetup();
         // add it to the content pane
         getContentPane().add(panel);
+    }
+
+    private void getInitialSetup() {
+        // try to load the initial setup with filename "data"
+        try {
+            setup = Setup.loadFromFile("data");
+        } catch (IOException err) {
+            System.out.println("Setup load failed.");
+        }
     }
 
     private JPanel getMainPanel() {
@@ -127,14 +132,21 @@ public class SweUserInterface extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 simulation = new Simulation(setup.Companies, setup.Clients, setup.Shares);
+                panel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 simulation.runSimulation();
+                panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 history = simulation.getHistory();
                 data = initialiseIndexDataset(history);
+                loaded = true;
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
                 //clientData = initialiseClientDataset(history);
             }
         });
 
-        timer = new Timer(100, new ActionListener() {
+        timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 //Refresh the panel
@@ -145,19 +157,26 @@ public class SweUserInterface extends JFrame {
                         validate();
                         repaint();
                     }
+                if (currentDay == 257) {
+                    stopTimer = true;
                 }
+            }
         });
 
         // GO button
-        JButton buttonGo = new JButton("Go");
-        toolbar.add(buttonGo);
-        buttonGo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stopTimer = false;
-                timer.start();
-            }
-        });
+        if (loaded) {
+            JButton buttonGo = new JButton("Go");
+            toolbar.add(buttonGo);
+            buttonGo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    stopTimer = false;
+                    if (!timer.isRunning()) {
+                        timer.start();
+                    }
+                }
+            });
+        }
 
         // PAUSE button
         JButton buttonPause = new JButton("Pause");
@@ -190,19 +209,10 @@ public class SweUserInterface extends JFrame {
         buttonSetup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // create test arrays
-                //ArrayList<Company> companies = new ArrayList<>();
-                //companies.add(new Company("Monsters Inc.", StockType.HITECH, 300f));
-                //ArrayList<Portfolio> portfolios = new ArrayList<>();
-                //portfolios.add(new Portfolio("Dave's Stocks", 4844, new RandomTrader(RandomInnerTraders.BALANCED)));
-                // create test shares map
-                //SharesMap shares = new SharesMap();
                 SetupUserInterface set = new SetupUserInterface(setup);
                 set.addHierarchyListener(new HierarchyListener() {
                     @Override
                     public void hierarchyChanged(HierarchyEvent e) {
-                        System.out.println("valid: " + set.isValid());
-                        System.out.println("showing: " + set.isShowing());
                         setup = set.getS();
                     }
                 });
@@ -264,7 +274,7 @@ public class SweUserInterface extends JFrame {
                 "Time","Index",
                 createIndexDataset(),
                 PlotOrientation.VERTICAL,
-                true,true,false);
+                false,true,false);
 
         // get the xyplot
         XYPlot xyPlot = lineChart.getXYPlot();
@@ -285,19 +295,23 @@ public class SweUserInterface extends JFrame {
         numAxis.setTickUnit(new NumberTickUnit(20));
 
         ChartPanel chartPanel = new ChartPanel( lineChart );
+
+        plot.setBackgroundPaint(new Color(0, 0, 0));
+        plot.getRenderer().setSeriesPaint(0, new Color(0,180,0));
+
         return chartPanel;
         //chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
         //setContentPane( chartPanel );
     }
 
     private ChartPanel createClientChart() {
-        JFreeChart barChart = ChartFactory.createBarChart(
-                "Client Worth",
-                "Category",
-                "Score",
+        JFreeChart barChart = ChartFactory.createBarChart3D(
+                "Client Worths",
+                "Client",
+                "Total Worth (£)",
                 createClientDataset(),
                 PlotOrientation.VERTICAL,
-                true, true, false);
+                false, true, false);
 
         CategoryPlot plot = (CategoryPlot) barChart.getPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -306,6 +320,18 @@ public class SweUserInterface extends JFrame {
         } else {
             rangeAxis.setRange(0.0, simulation.getHistory().getHighestClientWorth());
         }
+
+        final StackedBarRenderer3D renderer = new CustomRenderer(
+                new Paint[] {Color.red, Color.blue, Color.green,
+                        Color.yellow, Color.orange, Color.cyan,
+                        Color.magenta, Color.pink, Color.DARK_GRAY}
+        );
+
+        final CategoryAxis axis = plot.getDomainAxis();
+        axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+
+
+        plot.setRenderer(renderer);
 
         ChartPanel chartPanel = new ChartPanel( barChart );
 
