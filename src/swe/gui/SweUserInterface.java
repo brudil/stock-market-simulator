@@ -100,8 +100,28 @@ public class SweUserInterface extends JFrame {
         // create toolbar at bottom of GUI
         JPanel toolbar = new JPanel();
 
+        String status;
+
+        if (simulation != null) {
+            status = simulation.getHistory().getStateForEndOfEachDay()[currentDay-1].status.toString();
+        } else {
+            status = "STATUS";
+        }
+
+        JButton buttonStatus = new JButton(status);
+        if (status == "BULL") {
+            buttonStatus.setForeground(Color.GREEN);
+        } else if (status == "BEAR") {
+            buttonStatus.setForeground(Color.RED);
+        } else if (status == "STABLE") {
+            buttonStatus.setForeground(Color.ORANGE);
+        }
+
+        buttonStatus.setPreferredSize(new Dimension(100, 25));
+        toolbar.add(buttonStatus, BorderLayout.LINE_START);
+
         // start button
-        JButton buttonStart = new JButton("Start Simulation");
+        JButton buttonStart = new JButton("Run Simulation");
         toolbar.add(buttonStart);
         buttonStart.addActionListener(new ActionListener() {
             @Override
