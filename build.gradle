@@ -1,5 +1,8 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "1.2.4"
+    id "edu.sc.seis.macAppBundle" version "2.1.6"
+    id 'edu.sc.seis.launch4j' version '2.3.0'
+
 }
 
 
@@ -29,6 +32,22 @@ jar {
     manifest {
         attributes 'Main-Class': 'swe.Main'
     }
+}
+
+launch4j {
+  mainClassName = 'swe.Main'
+  icon = '../../resources/icons/icon.ico'
+  jar = "lib/${project.tasks.shadowJar.archiveName}"
+  copyConfigurable = project.tasks.shadowJar.outputs.files
+  outfile = 'Wolf Gecko - Market Simulator.exe'
+}
+
+macAppBundle {
+    mainClassName = 'swe.Main'
+    bundleJRE = false
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    appName = "Wolf & Gecko Market Simulator"
+    icon = "resources/icons/icon.icns"
 }
 
 jacocoTestReport {
