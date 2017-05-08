@@ -32,6 +32,9 @@ public class Market {
         return this.shares;
     }
 
+    /**
+     * @return Portfolios and their requested trades
+     */
     public HashMap<Portfolio, TradeSlip> getRequestedPortfolioTrades() {
         HashMap<Portfolio, TradeSlip> trades = new HashMap<>();
         for (Portfolio portfolio : this.portfolios) {
@@ -45,7 +48,7 @@ public class Market {
     }
 
     /**
-     * Performs requested portfolio trades using best-attempt method, sharing at over-buying & selling
+     * Performs requested portfolio trades using best-attempt method, sharing at over-buying and selling
      * @param trades Map of portfolios to a TradeSlip with their intended trades
      */
     public void performRequestedTradesBestAttempt(HashMap<Portfolio, TradeSlip> trades) {
@@ -168,6 +171,10 @@ public class Market {
         // TODO: ensure what we have sold equals what was brought
     }
 
+    /**
+     * @return Calculates the market share index
+     * No side effects
+     */
     public double getShareIndex() {
         // Get total of all companies share prices and then average them
         double totalPrice =  companies.stream()

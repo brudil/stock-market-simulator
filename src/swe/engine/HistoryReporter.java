@@ -1,5 +1,8 @@
 package swe.engine;
 
+/**
+ * Intended to be used as a separate class for housing data analysis functions on the History
+ */
 public class HistoryReporter {
     private History history;
 

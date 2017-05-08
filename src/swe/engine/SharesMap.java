@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Houses shares and their relationship between Companies shares and the portfolios that own them
+ */
 public class SharesMap {
     private HashMap<Company, HashMap<Portfolio, Share>> companyShares;
     private HashMap<Portfolio, HashMap<Company, Share>> portfolioShares;
@@ -13,6 +16,12 @@ public class SharesMap {
         portfolioShares = new HashMap<>();
     }
 
+    /**
+     * Sets shares in a company that a portfolio owns
+     * @param company company of shares
+     * @param portfolio portfolio that will own shares
+     * @param shares quantity of shares
+     */
     public void setShares(Company company, Portfolio portfolio, int shares) {
         Share share = new Share(shares);
         HashMap<Portfolio, Share> portfolioMap = this.companyShares.getOrDefault(company, new HashMap<>());
@@ -24,6 +33,10 @@ public class SharesMap {
         this.portfolioShares.put(portfolio, companyMap);
     }
 
+    /**
+     * @param portfolio desired portfolio
+     * @return map of companies and shares owned by given portfolio
+     */
     public HashMap<Company, Share> getSharesForPortfolio(Portfolio portfolio) {
         if (!this.portfolioShares.containsKey(portfolio)) {
             this.portfolioShares.put(portfolio, new HashMap<>());
@@ -31,6 +44,10 @@ public class SharesMap {
         return this.portfolioShares.get(portfolio);
     }
 
+    /**
+     * @param company desired company
+     * @return map of portfolios and shares owned for given company
+     */
     public HashMap<Portfolio, Share> getSharesForCompany(Company company) {
         if (!this.companyShares.containsKey(company)) {
             this.companyShares.put(company, new HashMap<>());
@@ -38,12 +55,21 @@ public class SharesMap {
         return this.companyShares.get(company);
     }
 
+    /**
+     * @param company company of shares quantity
+     * @return total shares within given company
+     */
     public int getTotalSharesForCompany(Company company) {
         return getSharesForCompany(company).entrySet().stream()
                 .mapToInt(entry -> entry.getValue().getNumberOfShares())
                 .reduce(0, Integer::sum);
     }
 
+    /**
+     * @param portfolio given portfolio
+     * @param percentage percentage between 0 - 100 of random shares
+     * @return map of random companies and random shares of percentage given
+     */
     public Map<Company, Integer> getRandomSharePercentageOfPortfolio(Portfolio portfolio, double percentage) {
         HashMap<Company, Share> sharesInCompanies = this.getSharesForPortfolio(portfolio);
 
@@ -63,8 +89,8 @@ public class SharesMap {
     }
 
     /**
-     * @param company
-     * @param portfolio
+     * @param company given company
+     * @param portfolio given portfolio
      * @return Mutable share object
      */
     public Share getSharesForCompanyInPortfolio(Company company, Portfolio portfolio) {

@@ -10,6 +10,9 @@ import java.util.Random;
 
 // using composition this directs out our calls to the trader of the day (being either balanced, aggressive purchaser and aggressive seller)
 
+/**
+ * Implements a Random style trader, as described in spec
+ */
 public class RandomTrader extends Trader {
 
     private RandomInnerTraders currentInnerTrader = RandomInnerTraders.BALANCED;

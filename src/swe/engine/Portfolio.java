@@ -3,6 +3,9 @@ package swe.engine;
 import java.util.HashMap;
 import swe.engine.traders.Trader;
 
+/**
+ * Portfolio containing shares owned in companies, managed by a given trader
+ */
 public class Portfolio {
     private String name;
     private Trader trader;
@@ -45,6 +48,9 @@ public class Portfolio {
 
     }
 
+    /**
+     * @return Current worth of portfolio
+     */
     public double getWorth() {
         return getCash() + getShares().entrySet().stream()
                 .map(entry -> entry.getKey().getPrice() * entry.getValue().getNumberOfShares())
@@ -63,10 +69,6 @@ public class Portfolio {
     public String toString() {
         String s = "Client{" + "Name=" + this.name + ", Cash=" + this.cash + ", Trader_Type=" + "tbi";
         String s2 = "\nShares:\n";
-
-        //for (int i = 0; i < this.shares.size(); i++) {
-        //    s2 = s2.concat("Company: "+this.shares.get(i).getCompany().getName()+"\tNo Of Shares: "+this.shares.get(i).getNoOfShares()+"\n");
-        //}
 
         return s+s2;
     }

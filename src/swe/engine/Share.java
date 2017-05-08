@@ -1,5 +1,8 @@
 package swe.engine;
 
+/**
+ * Represents a collection of shares between a Company and a Portfolio
+ */
 public class Share {
     private int numberOfShares;
 

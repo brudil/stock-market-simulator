@@ -8,6 +8,9 @@ import swe.engine.TradeSlip;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Handles the AggressiveSeller mode of RandomTrader
+ */
 public class AggressiveSellerTrader extends Trader {
     @Override
     public TradeSlip getRequestedTrades(Portfolio portfolio, Market market) {

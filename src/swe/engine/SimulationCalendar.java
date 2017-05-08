@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * Handles date and tick handling for Simulation
+ */
 public class SimulationCalendar {
     private final int tickCount;
     private final TickIdentifier[] ticks;
@@ -18,6 +21,10 @@ public class SimulationCalendar {
         return this.ticks;
     }
 
+    /**
+     * Generates TickIdentifiers based on internal logic
+     * @return List of TickIdentifiers
+     */
     private ArrayList<TickIdentifier> generateDays() {
         ArrayList<TickIdentifier> flexibleTicks = new ArrayList<>();
         int tickId = 0;
@@ -38,7 +45,6 @@ public class SimulationCalendar {
     public int getTickCount() {
         return this.tickCount;
     }
-
 
     /**
      * Move time forward for next tick

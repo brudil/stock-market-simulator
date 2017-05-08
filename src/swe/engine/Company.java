@@ -1,8 +1,22 @@
 package swe.engine;
 
+/**
+ * Represents a company listed on the stock market
+ */
 public class Company {
+    /**
+     * Display name of company
+     */
     String name;
+
+    /**
+     * Type of company listed in markert
+     */
     StockType stockType;
+
+    /**
+     * Latest stock price
+     */
     Double price;
 
     public Company(String name, StockType stockType, Double price) {
@@ -25,10 +39,6 @@ public class Company {
 
     public StockType getStockType() {
         return this.stockType;
-    }
-
-    void printName() {
-        System.out.println(this.name);
     }
 
     @Override

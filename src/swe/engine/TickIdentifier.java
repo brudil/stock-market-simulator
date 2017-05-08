@@ -2,6 +2,10 @@ package swe.engine;
 
 import java.util.Calendar;
 
+/**
+ * Represents a tick in the simulation
+ * Holds date flags such as if it is the first or last tick of day
+ */
 public class TickIdentifier {
     public final Calendar calendar;
     public final int tickId;

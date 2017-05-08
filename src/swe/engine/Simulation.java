@@ -23,6 +23,9 @@ public class Simulation {
         this.history = new History(simulationCalendar.getTickCount());
     }
 
+    /**
+     * Runs the simulation for ticks in calender
+     */
     public void runSimulation() {
 
         for(TickIdentifier tick : this.simulationCalendar.getAllTickIdentifiers()) {
@@ -32,12 +35,16 @@ public class Simulation {
         System.out.println(this.history.getStateForEndOfEachDay().length);
     }
 
+    /**
+     * @return History of market
+     */
     public History getHistory() {
         return this.history;
     }
 
     /**
      * Performs a 15min trading period
+     * @param tick TickIdentifier of tick to simulate
      */
     public void performTick(TickIdentifier tick) {
         // does everything

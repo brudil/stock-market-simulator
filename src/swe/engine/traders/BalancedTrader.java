@@ -8,6 +8,9 @@ import swe.engine.TradeSlip;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Handles the Balanced mode of RandomTrader
+ */
 public class BalancedTrader extends Trader {
 
     @Override

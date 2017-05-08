@@ -11,5 +11,11 @@ public abstract class Trader {
      */
     public void onNewDay() {}
 
+    /**
+     * Gets a TradeSlip of trades wanted for given portfolio
+     * @param portfolio portfolio of requested trades
+     * @param market market instance
+     * @return TradeSlip containing requested trades
+     */
     abstract public TradeSlip getRequestedTrades(Portfolio portfolio, Market market);
 }
