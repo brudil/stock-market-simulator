@@ -78,7 +78,7 @@ public class Portfolio {
      * Gets requested changes from the portfolios trader
      * @return a map of trades company:shares change
      */
-    public TradeSlip getRequestedTrades() {
-        return this.trader.getRequestedTrades(this, this.market);
+    public TradeSlip getRequestedTrades(History history) {
+        return this.trader.getRequestedTrades(this, this.market, history);
     }
 }

@@ -14,6 +14,7 @@ public class History {
 
     private int totalDays;
     private HistoryState[] ticksState;
+    private int lastTick = -1;
 
     public History(int totalDays) {
         this.totalDays = totalDays;
@@ -34,6 +35,7 @@ public class History {
                 getPortfolioWorth(market)
         );
 
+        lastTick = tick.tickId;
         ticksState[tick.tickId] = state;
     }
 
@@ -140,5 +142,13 @@ public class History {
      */
     public double getHighestClientWorth() {
         return Arrays.stream(ticksState).map(state -> Collections.max(state.portfolioWorth.values())).max(Double::compare).get();
+    }
+
+    public HistoryState getLastTick() {
+        if (lastTick < 0) {
+            return null;
+        }
+
+        return ticksState[lastTick];
     }
 }

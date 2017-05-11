@@ -35,10 +35,10 @@ public class Market {
     /**
      * @return Portfolios and their requested trades
      */
-    public HashMap<Portfolio, TradeSlip> getRequestedPortfolioTrades() {
+    public HashMap<Portfolio, TradeSlip> getRequestedPortfolioTrades(History history) {
         HashMap<Portfolio, TradeSlip> trades = new HashMap<>();
         for (Portfolio portfolio : this.portfolios) {
-            TradeSlip tradeSlip = portfolio.getRequestedTrades();
+            TradeSlip tradeSlip = portfolio.getRequestedTrades(history);
             if (tradeSlip != null) {
                 trades.put(portfolio, tradeSlip);
             }

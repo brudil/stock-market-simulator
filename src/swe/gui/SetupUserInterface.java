@@ -2,6 +2,7 @@ package swe.gui;
 
 import swe.engine.StockType;
 import swe.engine.traders.RandomTrader;
+import swe.engine.traders.SmartTrader;
 import swe.engine.traders.Trader;
 import swe.setup.Setup;
 
@@ -243,7 +244,7 @@ public class SetupUserInterface extends JDialog {
                         "Client Name: ",
                         "Enter Client Name",
                         JOptionPane.PLAIN_MESSAGE);
-                Object[] possibilities = {new RandomTrader()};
+                Object[] possibilities = {new RandomTrader(), new SmartTrader()};
                 Trader trader = (Trader)JOptionPane.showInputDialog(
                         JOptionPane.getRootFrame(),
                         "Client Trader Type:",

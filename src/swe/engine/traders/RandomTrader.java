@@ -1,11 +1,6 @@
 package swe.engine.traders;
 
-import swe.engine.Company;
-import swe.engine.Market;
-import swe.engine.Portfolio;
-import swe.engine.TradeSlip;
-
-import java.util.HashMap;
+import swe.engine.*;
 import java.util.Random;
 
 // using composition this directs out our calls to the trader of the day (being either balanced, aggressive purchaser and aggressive seller)
@@ -68,8 +63,8 @@ public class RandomTrader extends Trader {
     }
 
     @Override
-    public TradeSlip getRequestedTrades(Portfolio portfolio, Market market) {
-        return this.getCurrentTrader().getRequestedTrades(portfolio, market);
+    public TradeSlip getRequestedTrades(Portfolio portfolio, Market market, History history) {
+        return this.getCurrentTrader().getRequestedTrades(portfolio, market, history);
     }
 
     private Trader getCurrentTrader() {

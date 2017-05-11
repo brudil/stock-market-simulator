@@ -1,11 +1,6 @@
 package swe.engine;
-
-import swe.engine.traders.RandomInnerTraders;
-import swe.engine.traders.RandomTrader;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 /**
@@ -57,7 +52,7 @@ public class Simulation {
         }
 
         // 1) get sale offers and sought purchases
-        HashMap<Portfolio, TradeSlip> trades = this.market.getRequestedPortfolioTrades();
+        HashMap<Portfolio, TradeSlip> trades = this.market.getRequestedPortfolioTrades(this.history);
 
         // 2) determine what will be brought and sold
         // 3) do transactions

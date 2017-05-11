@@ -1,9 +1,6 @@
 package swe.engine.traders;
 
-import swe.engine.Company;
-import swe.engine.Market;
-import swe.engine.Portfolio;
-import swe.engine.TradeSlip;
+import swe.engine.*;
 
 import java.util.Map;
 import java.util.Random;
@@ -14,7 +11,7 @@ import java.util.Random;
 public class BalancedTrader extends Trader {
 
     @Override
-    public TradeSlip getRequestedTrades(Portfolio portfolio, Market market) {
+    public TradeSlip getRequestedTrades(Portfolio portfolio, Market market, History history) {
         TradeSlip ts = new TradeSlip();
         Random r = new Random();
         Map<Company, Integer> purchase = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextDouble() * 1);

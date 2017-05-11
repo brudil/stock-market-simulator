@@ -1,7 +1,6 @@
 package swe.gui;
 
 import com.cedarsoftware.util.io.JsonReader;
-import javafx.beans.value.ChangeListener;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -9,7 +8,6 @@ import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer3D;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -17,27 +15,19 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import swe.engine.*;
-import swe.engine.traders.RandomInnerTraders;
-import swe.engine.traders.RandomTrader;
 import swe.setup.Setup;
 
 import javax.swing.*;
 import javax.swing.Timer;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
-import static com.sun.org.apache.bcel.internal.util.SecuritySupport.getResourceAsStream;
 
 /**
  * Created by Fin on 23/04/2017.
