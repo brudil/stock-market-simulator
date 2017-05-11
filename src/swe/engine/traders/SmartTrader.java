@@ -18,7 +18,7 @@ public class SmartTrader extends Trader {
     @Override
     public TradeSlip getRequestedTrades(Portfolio portfolio, Market market, History history) {
         Random r = new Random();
-        if (history.getLastTick() != null && history.getLastTick().status == MarketStatus.BULL) {
+        if (history.getLastTick() != null && history.getLastTick().status == MarketStatus.BEAR) {
             TradeSlip ts = new TradeSlip();
             Map<Company, Integer> purchase = market.getShares().getRandomSharePercentageOfPortfolio(portfolio, r.nextDouble() * 2);
             purchase.forEach((key, value) -> ts.put(key, ts.getOrDefault(key, 0) + value));
