@@ -332,7 +332,7 @@ public class Setup {
 
 
     public static Setup loadFromFile(String filename) throws FileNotFoundException, IOException {
-        Path path = Paths.get("fixtures/" + filename + ".json");
+        Path path = Paths.get(filename);
         if (!Files.exists(path)) {
             throw new FileNotFoundException();
         }
@@ -340,8 +340,9 @@ public class Setup {
         return (Setup) JsonReader.jsonToJava(new String(Files.readAllBytes(path), StandardCharsets.UTF_8));
     }
 
-    public void saveToFile(String filename) throws IOException {
-        Path path = Paths.get("fixtures/" + filename + ".json");
+    public void saveToFile(File file) throws IOException {
+        String dir = file.getPath();
+        Path path = Paths.get(dir);
 
         String json = JsonWriter.objectToJson(this);
         Files.write(path, json.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);

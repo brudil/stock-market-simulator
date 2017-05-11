@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -60,15 +61,15 @@ public class SetupUserInterface extends JDialog {
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String filename = (String) JOptionPane.showInputDialog(
-                        JOptionPane.getRootFrame(),
-                        "File Name: ",
-                        "Enter File Name",
-                        JOptionPane.PLAIN_MESSAGE);
-                try {
-                    s.saveToFile(filename);
-                } catch (IOException e1) {
-                    System.out.println("Failed to save setup");
+                final JFileChooser fc = new JFileChooser();
+                int returnVal = fc.showSaveDialog(SetupUserInterface.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    try {
+                        s.saveToFile(file);
+                    } catch (IOException err) {
+                        System.out.println("Setup load failed.");
+                    }
                 }
             }
         });
@@ -76,17 +77,17 @@ public class SetupUserInterface extends JDialog {
         load.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String filename = (String)JOptionPane.showInputDialog(
-                        JOptionPane.getRootFrame(),
-                        "File Name: ",
-                        "Enter File Name",
-                        JOptionPane.PLAIN_MESSAGE);
-                // TODO: catch error in gui
-                try {
-                    s = Setup.loadFromFile(filename);
-                } catch (IOException err) {
-                    System.out.println("Setup load failed.");
+                final JFileChooser fc = new JFileChooser();
+                int returnVal = fc.showOpenDialog(SetupUserInterface.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    try {
+                        s = Setup.loadFromFile(file.getPath());
+                    } catch (IOException err) {
+                        System.out.println("Setup load failed.");
+                    }
                 }
+                // TODO: catch error in gui
                 JPanel panel = getMainPanel();
                 setContentPane(panel);
                 validate();

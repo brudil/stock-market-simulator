@@ -1,5 +1,6 @@
 package swe.gui;
 
+import com.cedarsoftware.util.io.JsonReader;
 import javafx.beans.value.ChangeListener;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -25,9 +26,18 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+
+import static com.sun.org.apache.bcel.internal.util.SecuritySupport.getResourceAsStream;
 
 /**
  * Created by Fin on 23/04/2017.
@@ -77,18 +87,21 @@ public class SweUserInterface extends JFrame {
         // get the main panel
         JPanel panel = getMainPanel();
         // load in the initial setup automatically
-        getInitialSetup();
+        try {
+            getInitialSetup();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // add it to the content pane
         getContentPane().add(panel);
     }
 
-    private void getInitialSetup() {
-        // try to load the initial setup with filename "data"
-        try {
-            setup = Setup.loadFromFile("data");
-        } catch (IOException err) {
-            System.out.println("Setup load failed.");
+    private void getInitialSetup() throws IOException {
+        Path path = Paths.get("fixtures/data.json");
+        if (!Files.exists(path)) {
+            throw new FileNotFoundException();
         }
+        setup = (Setup) JsonReader.jsonToJava(new String(Files.readAllBytes(path), StandardCharsets.UTF_8));
     }
 
     private JPanel getMainPanel() {
