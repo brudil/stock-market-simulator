@@ -342,7 +342,6 @@ public class SweUserInterface extends JFrame {
         final String client = "CLIENT WORTH";
         final DefaultCategoryDataset dataset =
                 new DefaultCategoryDataset();
-        Random rand = new Random();
         HashMap<Portfolio, Double> worths = getAllClientWorthForDay(history);
         for (Map.Entry<Portfolio, Double> entry : worths.entrySet()) {
             dataset.addValue(entry.getValue(), client, entry.getKey().getName());
