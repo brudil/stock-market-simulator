@@ -65,6 +65,7 @@ public class Portfolio {
         // this.market.deltaSharesForPortfolio(new Share(c, NoOfShares));
     }
 
+    /*
     @Override
     public String toString() {
         String s = "Client{" + "Name=" + this.name + ", Cash=" + this.cash + ", Trader_Type=" + "tbi";
@@ -72,7 +73,16 @@ public class Portfolio {
 
         return s+s2;
     }
+    */
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public void setTrader(Trader trader) {
+        this.trader = trader;
+    }
 
     /**
      * Gets requested changes from the portfolios trader

@@ -1,5 +1,7 @@
 package swe.gui;
 
+import swe.engine.Company;
+import swe.engine.Portfolio;
 import swe.engine.StockType;
 import swe.engine.traders.RandomTrader;
 import swe.engine.traders.SmartTrader;
@@ -267,8 +269,34 @@ public class SetupUserInterface extends JDialog {
             }
         });
 
+        // create delete client button
+        JButton buttonDeleteClient = new JButton("Delete Client");
+        buttonDeleteClient.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] possibilities = new Object[s.Clients.size()];
+                for (int i = 0; i < s.Clients.size(); i++) {
+                    possibilities[i] = s.Clients.get(i);
+                }
+                Portfolio client = (Portfolio) JOptionPane.showInputDialog(
+                        JOptionPane.getRootFrame(),
+                        "Client:",
+                        "Choose Client",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        possibilities,
+                        null);
+                s.Clients.remove(client);
+                JPanel panel = getMainPanel();
+                setContentPane(panel);
+                validate();
+                repaint();
+            }
+        });
+
         // add buttons to panel
         buttonPanel.add(buttonAddClient);
+        buttonPanel.add(buttonDeleteClient);
 
         panelClients.add(buttonPanel);
 

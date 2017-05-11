@@ -5,6 +5,7 @@ import swe.engine.Portfolio;
 import swe.engine.Share;
 import swe.engine.StockType;
 import swe.engine.traders.RandomTrader;
+import swe.engine.traders.SmartTrader;
 import swe.engine.traders.Trader;
 import swe.setup.Setup;
 
@@ -115,6 +116,25 @@ public class PortfolioUserInterface extends JDialog {
                 currentFrame.dispose();
             }
         });
+
+        JButton buttonChangeTrader = new JButton("Change Trader");
+        buttonChangeTrader.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] possibilities = {new RandomTrader(), new SmartTrader()};
+                Trader trader = (Trader)JOptionPane.showInputDialog(
+                        JOptionPane.getRootFrame(),
+                        "Client Trader Type:",
+                        "Choose Client Trader Type",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        possibilities,
+                        new RandomTrader().toString());
+                p.setTrader(trader);
+            }
+        });
+
+        panel.add(buttonChangeTrader);
         panel.add(closeButton);
 
         return panel;
