@@ -1,6 +1,8 @@
 package swe.gui;
 
 import com.cedarsoftware.util.io.JsonReader;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -21,8 +23,11 @@ import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -87,11 +92,8 @@ public class SweUserInterface extends JFrame {
     }
 
     private void getInitialSetup() throws IOException {
-        Path path = Paths.get("fixtures/data.json");
-        if (!Files.exists(path)) {
-            throw new FileNotFoundException();
-        }
-        setup = (Setup) JsonReader.jsonToJava(new String(Files.readAllBytes(path), StandardCharsets.UTF_8));
+        URL url = Resources.getResource("fixtures/data.json");
+        setup = (Setup) JsonReader.jsonToJava(Resources.toString(url, Charsets.UTF_8));
     }
 
     private JPanel getMainPanel() {
