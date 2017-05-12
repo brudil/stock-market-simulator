@@ -27,8 +27,8 @@ public class MarketTest {
 
     @Before
     public void setUp() throws Exception {
-        aInc = new Company("A inc.", StockType.HITECH, (float) 300.0);
-        bInc = new Company("B inc.", StockType.HITECH, (float) 300.0);
+        aInc = new Company("A inc.", StockType.HITECH, (double) 300.0);
+        bInc = new Company("B inc.", StockType.HITECH, (double) 300.0);
 
         fooPort = new Portfolio("Bar", 200, new RandomTrader(RandomInnerTraders.BALANCED));
         barPort = new Portfolio("Foo", 400, new RandomTrader(RandomInnerTraders.BALANCED));

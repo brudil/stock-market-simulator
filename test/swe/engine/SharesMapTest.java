@@ -20,8 +20,8 @@ public class SharesMapTest {
     @Before
     public void setup() {
         this.shares = new SharesMap();
-        this.companyA = new Company("Daves Company", StockType.HARD, (float) 44.0);
-        this.companyMissing = new Company("Missing", StockType.HARD, (float) 3.0);
+        this.companyA = new Company("Daves Company", StockType.HARD, (double) 44.0);
+        this.companyMissing = new Company("Missing", StockType.HARD, (double) 3.0);
         this.portA = new Portfolio("Bee's ", 3382.33, new RandomTrader(RandomInnerTraders.AGGRESSIVE_PURCHASER));
         this.portMissing = new Portfolio("Missing Port ", 32.33, new RandomTrader(RandomInnerTraders.AGGRESSIVE_PURCHASER));
 
